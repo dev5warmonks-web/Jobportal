@@ -29,7 +29,7 @@ export default function BasicDetails() {
 
       <form
         onSubmit={handleSubmit}
-        className="p-6 space-y-5"
+        className="space-y-5"
       >
         <div className="flex gap-3">
           {/* First Name */}
