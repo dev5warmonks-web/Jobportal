@@ -2,7 +2,6 @@
 import { useState } from "react";
 
 export default function BasicDetails() {
-
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -10,7 +9,7 @@ export default function BasicDetails() {
     contact: "",
     subscriptionEmail: "",
   });
-  const [isSubscribed, setIsSubscribed] = useState(false); // track subscription
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -25,15 +24,11 @@ export default function BasicDetails() {
   };
 
   return (
-    <div className="mx-auto bg-[#E2F4FA] h-screen">
-
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-5"
-      >
-        <div className="flex gap-3">
-          {/* First Name */}
-          <div className="w-1/2">
+    <div className="mx-auto bg-[#E2F4FA] min-h-screen p-4 md:p-8">
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
+        {/* Name Fields */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1">
             <label className="block font-medium mb-1">Your first name</label>
             <input
               type="text"
@@ -45,8 +40,7 @@ export default function BasicDetails() {
             />
           </div>
 
-          {/* Last Name */}
-          <div className="w-1/2">
+          <div className="flex-1">
             <label className="block font-medium mb-1">Your last name</label>
             <input
               type="text"
@@ -59,9 +53,9 @@ export default function BasicDetails() {
           </div>
         </div>
 
-        <div className="flex gap-3">
-          {/* Email */}
-          <div className="w-1/2">
+        {/* Email & Contact */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1">
             <label className="block font-medium mb-1">Primary email address</label>
             <input
               type="email"
@@ -73,8 +67,7 @@ export default function BasicDetails() {
             />
           </div>
 
-          {/* Contact Number */}
-          <div className="w-1/2">
+          <div className="flex-1">
             <label className="block font-medium mb-1">Contact number</label>
             <input
               type="text"
@@ -87,28 +80,14 @@ export default function BasicDetails() {
           </div>
         </div>
 
-        {/* Subscription Email */}
-        {/* <div>
-          <p className="font-bold">Get job offers straight to your inbox</p>
-          <p>Subscribe to our newsletter and be the first to receive exclusive tech job offers and updates. Stay ahead in your career search!</p>
-          <label className="block font-medium mb-1 mt-1.5">
-            Enter your email to subscribe
-          </label>
-          <input
-            type="email"
-            name="subscriptionEmail"
-            value={form.subscriptionEmail}
-            onChange={handleChange}
-            className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
-          />
-        </div> */}
-
         {/* Subscription Section */}
         <div>
           {!isSubscribed ? (
-            <>
-              <p className="font-bold">Get job offers straight to your inbox</p>
-              <p>Subscribe to our newsletter and be the first to receive exclusive tech job offers and updates. Stay ahead in your career search!</p>
+            <div className="space-y-2">
+              <p className="font-bold text-lg">Get job offers straight to your inbox</p>
+              <p className="text-sm md:text-base">
+                Subscribe to our newsletter and be the first to receive exclusive tech job offers and updates. Stay ahead in your career search!
+              </p>
               <label className="block font-medium mb-1 mt-1.5">
                 Enter your email to subscribe
               </label>
@@ -119,11 +98,11 @@ export default function BasicDetails() {
                 onChange={handleChange}
                 className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
               />
-            </>
+            </div>
           ) : (
             <div className="bg-green-100 p-4 rounded-md text-green-800">
               <p className="font-bold">You're subscribed!</p>
-              <p>
+              <p className="text-sm md:text-base">
                 Thank you for subscribing! You'll now receive the latest job offers, career tips, and updates straight to your inbox. Stay tuned for exciting opportunities!
               </p>
               <button
@@ -140,12 +119,15 @@ export default function BasicDetails() {
           )}
         </div>
 
-        <button
-          type="submit"
-          className="bg-black text-white px-5 py-2 rounded-full"
-        >
-          Save changes
-        </button>
+        {/* Submit Button */}
+        <div className="flex">
+          <button
+            type="submit"
+            className="bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition-colors"
+          >
+            Save changes
+          </button>
+        </div>
       </form>
     </div>
   );

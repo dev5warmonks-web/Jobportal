@@ -1,8 +1,7 @@
 "use client";
-import { useState } from "react";  
+import { useState } from "react";
 
 export default function ProfessionalDetails() {
-
   const [form, setForm] = useState({
     experiencelevel: "",
     highesteducation: "",
@@ -12,14 +11,7 @@ export default function ProfessionalDetails() {
     keySkills: [],
   });
 
-  const skillsOptions = [
-    "JavaScript",
-    "React",
-    "Node.js",
-    "Python",
-    "Java",
-    "SQL",
-  ];
+  const skillsOptions = ["JavaScript", "React", "Node.js", "Python", "Java", "SQL"];
 
   const handleSelectSkill = (skill) => {
     if (!form.keySkills.includes(skill)) {
@@ -28,10 +20,7 @@ export default function ProfessionalDetails() {
   };
 
   const handleRemoveSkill = (skill) => {
-    setForm({
-      ...form,
-      keySkills: form.keySkills.filter((s) => s !== skill),
-    });
+    setForm({ ...form, keySkills: form.keySkills.filter((s) => s !== skill) });
   };
 
   const handleChange = (e) => {
@@ -44,53 +33,48 @@ export default function ProfessionalDetails() {
   };
 
   return (
-    <div className="mx-auto bg-[#E2F4FA] h-screen">
-
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-5"
-      >
-        <div className="flex gap-3">
-          {/* Your experience level */}
-          <div className="w-1/2">
+    <div className="mx-auto bg-[#E2F4FA] min-h-screen p-4 md:p-8">
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
+        {/* Experience & Education */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1">
             <label className="block font-medium mb-1">Your experience level</label>
             <select
-            name="experienceLevel"
-            value={form.experiencelevel}
-            onChange={handleChange}
-            className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
-            required
+              name="experiencelevel"
+              value={form.experiencelevel}
+              onChange={handleChange}
+              className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
+              required
             >
-            <option value="">Select</option>
-            <option value="Fresher">Fresher</option>
-            <option value="Experienced">Experienced</option>
+              <option value="">Select</option>
+              <option value="Fresher">Fresher</option>
+              <option value="Experienced">Experienced</option>
             </select>
           </div>
 
-          {/* Highest education achieved */}
-          <div className="w-1/2">
+          <div className="flex-1">
             <label className="block font-medium mb-1">Highest education achieved</label>
             <select
-            name="highestEducation"
-            value={form.highesteducation}
-            onChange={handleChange}
-            className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
-            required
+              name="highesteducation"
+              value={form.highesteducation}
+              onChange={handleChange}
+              className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
+              required
             >
-            <option value="">Select</option>
-            <option value="degree">Bachelor's Degree</option>
-            <option value="pg">PG</option>
+              <option value="">Select</option>
+              <option value="degree">Bachelor's Degree</option>
+              <option value="pg">PG</option>
             </select>
           </div>
         </div>
 
-        <div className="flex gap-3">
-          {/* Current company/employer */}
-          <div className="w-1/2">
+        {/* Current Company & Preferred Industry */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1">
             <label className="block font-medium mb-1">Current company/employer</label>
             <input
               type="text"
-              name="currentCompany"
+              name="currentcompany"
               value={form.currentcompany}
               onChange={handleChange}
               className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
@@ -98,92 +82,93 @@ export default function ProfessionalDetails() {
             />
           </div>
 
-          {/* Preferred industry */}
-          <div className="w-1/2">
+          <div className="flex-1">
             <label className="block font-medium mb-1">Preferred industry</label>
             <select
-            name="preferredIndustry"
-            value={form.preferredindustry}
-            onChange={handleChange}
-            className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
-            required
+              name="preferredindustry"
+              value={form.preferredindustry}
+              onChange={handleChange}
+              className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
+              required
             >
-            <option value="">Select</option>
-            <option value="finance">Finance</option>
-            <option value="it">IT</option>
-            <option value="marketing">Marketing</option>
+              <option value="">Select</option>
+              <option value="finance">Finance</option>
+              <option value="it">IT</option>
+              <option value="marketing">Marketing</option>
             </select>
           </div>
         </div>
 
-        {/* Job type you prefer */}
+        {/* Preferred Job Type */}
         <div>
-        <label className="block font-medium mb-1">Job type you prefer</label>
-        <select
-        name="preferredJobType"
-        value={form.preferredjobtype}
-        onChange={handleChange}
-        className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
-        required
-        >
-        <option value="">Select</option>
-        <option value="fulltime">Full-Time</option>
-        <option value="parttime">Part-time</option>
-        <option value="freelance">Freelance</option>
-        </select>
+          <label className="block font-medium mb-1">Job type you prefer</label>
+          <select
+            name="preferredjobtype"
+            value={form.preferredjobtype}
+            onChange={handleChange}
+            className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
+            required
+          >
+            <option value="">Select</option>
+            <option value="fulltime">Full-Time</option>
+            <option value="parttime">Part-Time</option>
+            <option value="freelance">Freelance</option>
+          </select>
         </div>
 
-        {/* Key skills and expertise */}
+        {/* Key Skills */}
         <div>
-        <label className="block font-medium mb-1">Key skills and expertise</label>
+          <label className="block font-medium mb-1">Key skills and expertise</label>
 
-        {/* Selected skills */}
-        <div className="flex flex-wrap gap-2 mb-2">
+          {/* Selected Skills */}
+          <div className="flex flex-wrap gap-2 mb-2">
             {form.keySkills.map((skill) => (
-            <span
+              <span
                 key={skill}
                 className="flex items-center bg-black text-white px-2 py-1 rounded-full cursor-pointer"
-            >
+                onClick={() => handleRemoveSkill(skill)}
+              >
                 {skill}
-                {/* Down arrow icon */}
                 <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-3 h-3 ml-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-3 h-3 ml-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
                 >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-            </span>
+              </span>
             ))}
-        </div>
+          </div>
 
-        {/* Dropdown to select skills */}
-        <select
+          {/* Skills Dropdown */}
+          <select
             onChange={(e) => {
-            handleSelectSkill(e.target.value);
-            e.target.value = ""; // reset dropdown after selection
+              handleSelectSkill(e.target.value);
+              e.target.value = ""; // reset dropdown after selection
             }}
             className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
-        >
+          >
             <option value="">Select skill</option>
             {skillsOptions.map((skill) => (
-            <option key={skill} value={skill}>
+              <option key={skill} value={skill}>
                 {skill}
-            </option>
+              </option>
             ))}
-        </select>
+          </select>
         </div>
 
-
-        <button
-          type="submit"
-          className="bg-black text-white px-5 py-2 rounded-full"
-        >
-          Save changes
-        </button>
+        {/* Submit Button */}
+        <div className="flex">
+          <button
+            type="submit"
+            className="bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition-colors"
+          >
+            Save changes
+          </button>
+        </div>
       </form>
     </div>
   );

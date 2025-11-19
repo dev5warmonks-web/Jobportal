@@ -33,21 +33,21 @@ export default function ProfilePage() {
       <Topbar />
 
       {/* Main content with vertical tabs */}
-      <div className="flex p-6 mt-6">
-        {/* Vertical Tabs */}
-        <div className="flex flex-col space-y-3 w-auto">
+      <div className="flex flex-col md:flex-row p-4 md:p-6 mt-6">
+        {/* Tabs */}
+        <div className="flex md:flex-col flex-row md:space-y-3 space-x-3 md:space-x-0 overflow-x-auto">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <div
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center justify-between px-4 py-3 gap-2 rounded-full cursor-pointer transition-all border 
+                className={`flex items-center justify-between px-4 py-3 gap-2 rounded-full cursor-pointer transition-all border min-w-[150px]
                   ${isActive ? "bg-[#CCE9F2] border-[#A8D6E3] font-bold" : "hover:bg-[#D6EFF6] border-transparent"}
                 `}
               >
                 {/* Tab Text */}
-                <span className={`${isActive ? "font-bold" : "font-normal"}`}>
+                <span className={`${isActive ? "font-bold" : "font-normal"} text-sm text-black md:text-base`}>
                   {tab.name}
                 </span>
 
@@ -77,7 +77,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Tab Content */}
-        <div className="flex-1 ml-6">{renderTabContent()}</div>
+        <div className="flex-1 mt-4 md:mt-0 md:ml-6">{renderTabContent()}</div>
       </div>
     </div>
   );
