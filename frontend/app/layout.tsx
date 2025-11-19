@@ -24,10 +24,55 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
+
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="bg-gradient-to-b from-[#E2F4FA] via-white to-[#E2F4FA] antialiased"
       >
+        <nav className="w-full bg-white border-b border-gray-200">
+  <div className="mx-auto p-[10px] md:p-[50px] py-4 flex items-center justify-between">
+
+    <div className="text-2xl font-semibold tracking-tight">
+      <span className="text-black">nexttechie.</span>
+    </div>
+
+  
+
+    <div className="flex items-center md:space-x-4">
+      <a href="#" className="text-gray-600 hover:text-black font-medium text-[12px] md:text-[18px] leading-[20px] md:leading-[26px]">
+        Sign in / Register
+      </a>
+
+      <button className="px-[5px] py-[3px] md:px-4 md:py-2 bg-black text-white text-[12px] md:text-[18px] leading-[20px] md:leading-[26px] rounded-full hover:bg-gray-800 transition">
+        Post a job
+      </button>
+    </div>
+
+  </div>
+</nav>
+
         {children}
+        <footer className="w-full  py-2 bg-white">
+  <div className="mx-auto p-[10px] md:p-[50px] flex items-center justify-between text-sm">
+
+    {/* Left copyright */}
+    <span className="text-gray-700">© 2024 Warmonks</span>
+
+    {/* Right links */}
+    <div className="flex items-center gap-6 text-gray-700">
+      <a href="#" className="hover:underline">Terms & Conditions</a>
+      <a href="#" className="hover:underline">Privacy Policy</a>
+      <a href="#" className="hover:underline">About</a>
+      <a href="#" className="hover:underline">Blog</a>
+      <a href="#" className="hover:underline">Contact</a>
+    </div>
+
+  </div>
+</footer>
+
       </body>
     </html>
   );
