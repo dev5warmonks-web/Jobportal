@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getJobs } from "./api";
+import Modal from "./components/Modal/page";
+
 
 export default function Home() {
   const [jobs, setJobs] = useState([]);
@@ -8,6 +10,10 @@ export default function Home() {
   useEffect(() => {
     getJobs().then(setJobs);
   }, []);
+
+  const [open, setOpen] = useState(false);
+  const [selectedTitle, setSelectedTitle] = useState("");
+
 
   return (
     <main className="">
@@ -45,7 +51,29 @@ export default function Home() {
               </ul>
             </div>
                      <div className="w-1/2 md:w-auto mt-[10px]">
-              <h5 className="font-bold text-[16px]">Job Category</h5>
+              <h5 className="font-bold text-[16px]">Experience</h5>
+              <ul className="mt-2 space-y-1 text-[#525252]">
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Fresher</li>
+                 <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>0-1 Years</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>1-3 Years</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>3-5 Years</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>6-7 Years</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>8 Years</li>
+              </ul>
+            </div>
+                     <div className="w-1/2 md:w-auto mt-[10px]">
+              <h5 className="font-bold text-[16px]">Expected CTC</h5>
+              <ul className="mt-2 space-y-1 text-[#525252]">
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>15K</li>
+                 <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>15K-25K</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>25K-50K</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>50K-75K</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>75K-100K</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>100K+</li>
+              </ul>
+            </div>
+                     <div className="w-1/2 md:w-auto mt-[10px]">
+              <h5 className="font-bold text-[16px]">Sort by date</h5>
               <ul className="mt-2 space-y-1 text-[#525252]">
                 <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UI Designer</li>
                  <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UI Developer</li>
@@ -58,29 +86,7 @@ export default function Home() {
                      <div className="w-1/2 md:w-auto mt-[10px]">
               <h5 className="font-bold text-[16px]">Job Category</h5>
               <ul className="mt-2 space-y-1 text-[#525252]">
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UI Designer</li>
-                 <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UI Developer</li>
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>JavaScript Developer</li>
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Python Developer</li>
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UX Designer</li>
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Web Designer</li>
-              </ul>
-            </div>
-                     <div className="w-1/2 md:w-auto mt-[10px]">
-              <h5 className="font-bold text-[16px]">Job Category</h5>
-              <ul className="mt-2 space-y-1 text-[#525252]">
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UI Designer</li>
-                 <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UI Developer</li>
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>JavaScript Developer</li>
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Python Developer</li>
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UX Designer</li>
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Web Designer</li>
-              </ul>
-            </div>
-                     <div className="w-1/2 md:w-auto mt-[10px]">
-              <h5 className="font-bold text-[16px]">Job Category</h5>
-              <ul className="mt-2 space-y-1 text-[#525252]">
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UI Designer</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>1 day</li>
                  <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UI Developer</li>
                 <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>JavaScript Developer</li>
                 <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Python Developer</li>
@@ -99,15 +105,18 @@ export default function Home() {
           Latest Jobs
         </h3>
 
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row gap-[30px]">
           {/* Jobs List */}
-          <div className="lg:w-4/5 border border-gray-300 rounded-lg shadow-md grid grid-cols-1 md:grid-cols-2 gap-[30px]">
+          <div className="lg:w-4/5 grid grid-cols-1 md:grid-cols-2 gap-[30px]">
 
             {/* Job Cards */}
             {[1, 2, 3, 4].map((_, i) => (
               <div
-                key={i}
-                className="w-full p-[12px] bg-[#E2F4FA] border border-gray-300 rounded-lg shadow-md flex"
+                key={i} onClick={() => {
+    setSelectedTitle("Senior project manager - Python");
+    setOpen(true);
+  }}
+                className="w-full p-[12px] bg-[#E2F4FA] shadow-md flex"
               >
                 <img
                   src="/images/oracle.jpg"
@@ -183,7 +192,7 @@ export default function Home() {
           </div>
 
           {/* RIGHT SIDEBAR */}
-          <div className="lg:w-1/5 p-4 border border-gray-300 rounded-lg shadow-md bg-[#E2F4FA]">
+          <div className="lg:w-1/5 p-4 border border-gray-300 rounded-lg h-auto shadow-md bg-[#E2F4FA]">
             <h4 className="text-lg font-semibold mb-2">Support our community</h4>
             <p className="text-gray-600 mb-4">
               Help us grow and provide more opportunities for talented
@@ -255,6 +264,82 @@ export default function Home() {
 
         </div>
       </section>
+    
+
+      <Modal open={open} onClose={() => setOpen(false)} title={selectedTitle}>
+        <div className="flex mb-[20px]">
+          <img
+            src="/images/oracle.jpg" className="w-[87px]"
+            alt="Job"/>
+          <div className="ml-4">
+            <h4 className="font-semibold text-[18px] leading-[26px] font-['Poppins']">
+              {selectedTitle}
+              </h4>
+            <p className="text-gray-600 text-[12px] leading-[26px]">
+              <span className="font-bold">Accenture </span>
+              </p>
+                  <div className="flex gap-[16px] mt-1">
+                      <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
+                        Full-time
+                      </span>
+                      <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
+                        25-55k
+                      </span>
+                      <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
+                       6hr ago
+                      </span>
+                       <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
+                       101 Views
+                      </span>
+                       <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
+                       12 applications
+                      </span>
+                    </div>
+          </div>
+        </div>
+        <p className="font-bold">About company</p>
+        <p className="mb-4">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the 
+          industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled 
+          it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+           remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+          and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        </p>  
+          <p className="font-bold">Brief</p>
+        <p className="mb-4">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the 
+          industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled 
+          it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+           remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+          and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        </p>
+    <ul className="mt-2 space-y-1 text-[#525252]">
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
+                 <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
+                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
+              </ul>
+        <div className="flex gap-3 justify-end">
+          <button
+            onClick={() => setOpen(false)}
+            className="px-4 py-2 rounded-full border"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={() => {
+              // your action
+              setOpen(false);
+            }}
+            className="px-4 py-2 rounded-full bg-black text-white"
+          >
+            Apply Now
+          </button>
+        </div>
+      </Modal>
     </main>
   );
 }
