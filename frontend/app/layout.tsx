@@ -24,15 +24,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
       <link
   href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
   rel="stylesheet"
 />
+</head>
 
       <body
-        className="overflow-x-hidden bg-gradient-to-b from-[#E2F4FA] via-white to-[#E2F4FA] antialiased"
+        className="overflow-x-hidden min-h-screen bg-black antialiased"
       >
-        <nav className="w-full bg-white border-b border-gray-200">
+        <nav className="w-full bg-transparent border-b border-gray-200">
   <div className="mx-auto p-[10px] md:p-[50px] py-4 flex items-center justify-between">
 
     <div className="text-2xl font-semibold tracking-tight">
@@ -55,14 +57,14 @@ export default function RootLayout({
 </nav>
 
         {children}
-        <footer className="w-full  py-2 bg-white">
-  <div className="mx-auto p-[10px] md:p-[50px] flex items-center justify-between text-sm">
+        <footer className="w-full  py-2">
+  <div className="mx-auto p-[10px] md:p-[50px] flex flex-col md:flex-row items-center justify-between text-sm">
 
     {/* Left copyright */}
-    <span className="text-gray-700">© 2024 Warmonks</span>
+    <span className="text-gray-700 order-2 md:order-1 pt-[10px] md:pt-0">© 2024 Warmonks</span>
 
     {/* Right links */}
-    <div className="flex items-center gap-6 text-gray-700">
+    <div className="flex flex-row flex-wrap items-center gap-6 text-gray-700 order-1 md:order-2">
       <a href="#" className="hover:underline">Terms & Conditions</a>
       <a href="#" className="hover:underline">Privacy Policy</a>
       <a href="#" className="hover:underline">About</a>

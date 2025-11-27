@@ -20,11 +20,25 @@
 }
 
 body {
-  background: var(--background);
+    background: linear-gradient(
+    180deg,
+    #EFF2F3 0%,
+    #EAF4FF 40%,
+    #FFFFFF 100%
+  );
   color: var(--foreground);
    font-family: "Poppins", sans-serif;
   
 }
 .font-poppins {
   font-family: "Poppins", sans-serif;
+}
+
+.bg-landing {
+  background: linear-gradient(
+    180deg,
+    #EFF2F3 0%,
+    #EAF4FF 40%,
+    #FFFFFF 100%
+  );
 }

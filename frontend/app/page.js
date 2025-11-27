@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getJobs } from "./api";
+import { getJobs } from "./api"; 
 import Modal from "./components/Modal/page";
 
 
@@ -12,7 +12,7 @@ export default function Home() {
   }, []);
 
   const [open, setOpen] = useState(false);
-  const [selectedTitle, setSelectedTitle] = useState("");
+const [selectedJob, setSelectedJob] = useState(null);
 
 
   return (
@@ -37,12 +37,12 @@ export default function Home() {
         </div>
 
         {/* Job Categories (Responsive) */}
-        <div className="flex flex-wrap  md:gap-[40px] pt-[20px] md:pt-[40px] md:px-[40px] md:justify-center">
+        <div className="flex flex-wrap md:grid grid-cols-5 md:gap-[40px] pt-[20px] md:pt-[40px] md:px-[176px] md:justify-center">
          
             <div className="w-1/2 md:w-auto mt-[10px]" >
               <h5 className="font-bold text-[16px]">Job Category</h5>
-              <ul className="mt-2 space-y-1 text-[#525252]">
-                <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UI Designer</li>
+              <ul className="mt-2 space-y-1 text-[#525252] text-[16px] leading-[22px]">
+                <li className="flex items-center gap-[8px] text-[16px] leading-[22px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UI Designer</li>
                  <li className="flex items-center md:gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>UI Developer</li>
                 <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>JavaScript Developer</li>
                 <li className="flex items-center gap-[8px]"><span className="w-[9px] h-[9px] bg-black rounded-full mt-1"></span>Python Developer</li>
@@ -101,7 +101,7 @@ export default function Home() {
 
       {/* LATEST JOBS */}
       <section className="p-[10px] md:p-[50px] ">
-        <h3 className="text-[45px] leading-[35px] font-bold mb-[16px]">
+        <h3 className="text-[35px] md:text-[45px] leading-[35px] md:leading-[35px] mt-[15px] font-bold mb-[16px] ">
           Latest Jobs
         </h3>
 
@@ -109,50 +109,13 @@ export default function Home() {
           {/* Jobs List */}
           <div className="lg:w-4/5 grid grid-cols-1 md:grid-cols-2 gap-[30px]">
 
-            {/* Job Cards */}
-            {[1, 2, 3, 4].map((_, i) => (
-              <div
-                key={i} onClick={() => {
-    setSelectedTitle("Senior project manager - Python");
+
+            {jobs.map(job => ( 
+                       <div   key={job._id}
+  onClick={() => {
+    setSelectedJob(job);
     setOpen(true);
   }}
-                className="w-full p-[12px] bg-[#E2F4FA] shadow-md flex"
-              >
-                <img
-                  src="/images/oracle.jpg"
-                  alt="Job"
-                  className="w-[60px] h-[60px] object-cover rounded-md"
-                />
-
-                <div className="ml-4 flex flex-col md:flex-row justify-between">
-                  <div>
-                    <h4 className="font-semibold text-[18px] leading-[26px] font-['Poppins']">
-                      Senior project manager - Python
-                    </h4>
-                    <p className="text-gray-600 text-[12px] leading-[26px]">
-                      <span className="font-bold">Accenture </span>
-                      Chennai, 25K-50K, Design, Full time
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-[12px] leading-[22px]">
-                      <span>Chennai</span> · <span>5hr</span>
-                    </p>
-                    <div className="flex gap-[16px] mt-1">
-                      <span className="bg-black text-[12px] leading-[22px] text-white rounded-full px-[16px] py-[8px]">
-                        Python
-                      </span>
-                      <span className="bg-black text-[12px] leading-[22px] text-white rounded-full px-[16px] py-[8px]">
-                        AWS
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-            {jobs.map(job => ( 
-                       <div
                
                 className="w-full p-[12px] bg-[#E2F4FA] border border-gray-300 rounded-lg shadow-md flex"
               >
@@ -163,19 +126,19 @@ export default function Home() {
                 />
 
                 <div className="ml-4 flex flex-col md:flex-row justify-between">
-                  <div>
+                  <div className="w-full md:w-1/2">
                     <h4 className="font-semibold text-[18px] leading-[26px] font-['Poppins']">
                       {job.title}
                     </h4>
                     <p className="text-gray-600 text-[12px] leading-[26px]">
                       <span className="font-bold"> {job.company} </span>
-                      Chennai, 25K-50K, Design, Full time
+                      {job.location}, {job.salary}, {job.type}, {job.category}
                     </p>
                   </div>
 
-                  <div>
+                  <div className="w-full md:w-1/2">
                     <p className="text-[12px] leading-[22px]">
-                      <span>Chennai</span> · <span>5hr</span>
+                      <span>{job.location}</span> · <span>5hr</span>
                     </p>
                     <div className="flex gap-[16px] mt-1">
                       <span className="bg-black text-[12px] leading-[22px] text-white rounded-full px-[16px] py-[8px]">
@@ -189,6 +152,7 @@ export default function Home() {
                 </div>
               </div>
                ))}
+           
           </div>
 
           {/* RIGHT SIDEBAR */}
@@ -207,7 +171,7 @@ export default function Home() {
 
       {/* FEATURED COMPANIES */}
       <section className="p-[10px] md:p-[50px] ">
-        <h3 className="text-[45px] leading-[35px] font-bold mb-[16px]">
+        <h3 className="text-[35px] md:text-[45px] leading-[35px] md:leading-[35px] mt-[15px] font-bold mb-[16px]">
           Featured Companies
         </h3>
 
@@ -266,19 +230,19 @@ export default function Home() {
       </section>
     
 
-      <Modal open={open} onClose={() => setOpen(false)} title={selectedTitle}>
-        <div className="flex mb-[20px]">
+      <Modal open={open} onClose={() => setOpen(false)} >
+        <div className="flex flex-col md:flex-row mb-[20px]">
           <img
             src="/images/oracle.jpg" className="w-[87px]"
             alt="Job"/>
-          <div className="ml-4">
+          <div className="md:ml-4 mt-[10px]">
             <h4 className="font-semibold text-[18px] leading-[26px] font-['Poppins']">
-              {selectedTitle}
+               {selectedJob?.title}
               </h4>
             <p className="text-gray-600 text-[12px] leading-[26px]">
-              <span className="font-bold">Accenture </span>
+              <span className="font-bold"> {selectedJob?.company} </span>
               </p>
-                  <div className="flex gap-[16px] mt-1">
+                  <div className="flex flex-wrap gap-[16px] mt-1">
                       <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
                         Full-time
                       </span>
