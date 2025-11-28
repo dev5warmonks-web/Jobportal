@@ -200,7 +200,7 @@ export default function Home() {
       {/* HERO SECTION */}
       <section className="p-[10px] md:p-[50px] items-center bg-[#F5F9FB]">
         <h1 className="text-center text-[30px] md:text-[40px] font-bold mb-[16px]">
-          Find your next tech job now!
+          Find your next tech job now fast!
         </h1>
 
         {/* Search Bar */}
@@ -532,8 +532,8 @@ export default function Home() {
         </ul>
         {applicationMessage && (
           <div className={`mb-4 p-3 rounded-lg text-center ${applicationMessage.includes('success')
-              ? 'bg-green-100 text-green-800'
-              : 'bg-red-100 text-red-800'
+            ? 'bg-green-100 text-green-800'
+            : 'bg-red-100 text-red-800'
             }`}>
             {applicationMessage}
           </div>
