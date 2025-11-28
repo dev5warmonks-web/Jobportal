@@ -2,7 +2,7 @@
 import { useState } from "react";
 import BasicDetails from "./BasicDetails";
 import ProfessionalDetails from "./ProfessionalDetails";
-import AppliedJobs from "./AppliedJobs";
+import AppliedJobsView from "./AppliedJobs";
 import Topbar from "../components/topbar/page";
 import { SessionProvider } from "next-auth/react";
 
@@ -23,7 +23,7 @@ export default function profilepage() {
       case "professional":
         return <ProfessionalDetails />;
       case "applied":
-        return <AppliedJobs />;
+        return <AppliedJobsView />;
       default:
         return null;
     }
