@@ -2,12 +2,12 @@
 import { useState } from "react";
 import BasicDetails from "./BasicDetails";
 import ProfessionalDetails from "./ProfessionalDetails";
-import AppliedJobs from "./AppliedJobs";
+import AppliedJobs from "./appliedjobs";
 import Topbar from "../components/topbar/page";
 import { SessionProvider } from "next-auth/react";
 
 
-export default function ProfilePage() {
+export default function profilepage() {
   const [activeTab, setActiveTab] = useState("basic");
 
   const tabs = [
