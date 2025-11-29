@@ -1,10 +1,22 @@
 "use client";
 
-import { useState } from "react";
+// import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function CandidatesForm({ editItem, setEditItem, reload }) {
   const [formData, setFormData] = useState(editItem || { name: "", email: "", skills: "" });
 
+  useEffect(() => {
+    if (editItem) {
+      setFormData({
+        name: editItem.firstName || "",
+        email: editItem.email || "",
+        skills: Array.isArray(editItem.skills)
+          ? editItem.skills.join(", ")
+          : editItem.skills || "",
+      });
+    }
+  }, [editItem]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -12,11 +24,18 @@ export default function CandidatesForm({ editItem, setEditItem, reload }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const payload = {
+      firstName: formData.name,
+      lastName: "",
+      email: formData.email,
+      skills: formData.skills.split(",").map((s) => s.trim()),
+      user_role: "candidate",
+    };
     try {
       const method = editItem ? "PUT" : "POST";
       const url = editItem
-        ? `https://api.mindssparsh.com/api/candidates/${editItem._id}`
-        : `https://api.mindssparsh.com/api/candidates`;
+        ? `http://localhost:5000/api/candidates/${editItem._id}`
+        : `http://localhost:5000/api/candidates`;
 
       const res = await fetch(url, {
         method,

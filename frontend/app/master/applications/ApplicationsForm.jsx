@@ -15,8 +15,8 @@ export default function ApplicationsForm({ editItem, setEditItem, reload }) {
     try {
       const method = editItem ? "PUT" : "POST";
       const url = editItem
-        ? `https://api.mindssparsh.com/api/applications/${editItem._id}`
-        : `https://api.mindssparsh.com/api/applications`;
+        ? `http://localhost:5000/api/applications/${editItem._id}`
+        : `http://localhost:5000/api/applications`;
 
       const res = await fetch(url, {
         method,

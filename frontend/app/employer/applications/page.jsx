@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-const API_URL = "https://api.mindssparsh.com/api/applications";
+const API_URL = "http://localhost:5000/api/applications";
 
 export default function ApplicationsPage() {
   const [applications, setApplications] = useState([]);

@@ -15,7 +15,7 @@ export default function ApplicationsPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`https://api.mindssparsh.com/api/applications`);
+      const res = await fetch(`http://localhost:5000/api/applications`);
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error || "Failed to load applications");

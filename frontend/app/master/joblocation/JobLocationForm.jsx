@@ -35,8 +35,8 @@ export default function JobLocationForm({ editItem, setEditItem, reload }) {
     e.preventDefault();
     const method = editItem ? "PUT" : "POST";
     const url = editItem
-      ? `https://api.mindssparsh.com/api/job-locations/${editItem._id}`
-      : `https://api.mindssparsh.com/api/job-locations`;
+      ? `http://localhost:5000/api/job-locations/${editItem._id}`
+      : `http://localhost:5000/api/job-locations`;
 
     try {
       const res = await fetch(url, {

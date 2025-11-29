@@ -4,7 +4,7 @@ export default function ApplicationsList({ applications, setEditItem, reload }) 
   const handleDelete = async (id) => {
     if (!confirm("Are you sure?")) return;
     try {
-      const res = await fetch(`https://api.mindssparsh.com/api/applications/${id}`, {
+      const res = await fetch(`http://localhost:5000/api/applications/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Failed to delete");
@@ -17,7 +17,7 @@ export default function ApplicationsList({ applications, setEditItem, reload }) 
   return (
     <div className="bg-white rounded-lg shadow overflow-x-auto">
       <table className="w-full text-left border-collapse">
-        <thead className="bg-gray-200">
+        <thead className="bg-[#CCE9F2]">
           <tr>
             <th className="p-3 border">Status</th>
             <th className="p-3 border">Notes</th>

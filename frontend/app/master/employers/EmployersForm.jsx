@@ -7,7 +7,7 @@ export default function EmployersForm({ editItem, setEditItem, reload }) {
     firstName: "",
     lastName: "",
     email: "",
-    company_name: "",
+    companyName: "",
     mobile: "",
     password: "",
     logo: null,
@@ -20,7 +20,7 @@ export default function EmployersForm({ editItem, setEditItem, reload }) {
         firstName: editItem.firstName || "",
         lastName: editItem.lastName || "",
         email: editItem.email || "",
-        company_name: editItem.company_name || "",
+        companyName: editItem.companyName || "",
         mobile: editItem.mobile || "",
         password: "", // Don't show password on edit
         logo: null, // Reset logo input on edit
@@ -31,7 +31,7 @@ export default function EmployersForm({ editItem, setEditItem, reload }) {
         firstName: "",
         lastName: "",
         email: "",
-        company_name: "",
+        companyName: "",
         mobile: "",
         password: "",
         logo: null,
@@ -56,23 +56,25 @@ export default function EmployersForm({ editItem, setEditItem, reload }) {
     try {
       const method = editItem ? "PUT" : "POST";
       const url = editItem
-        ? `https://api.mindssparsh.com/api/users/${editItem._id}`
-        : `https://api.mindssparsh.com/api/users`;
+        ? `http://localhost:5000/api/users/${editItem._id}`
+        : `http://localhost:5000/api/users`;
 
       const data = new FormData();
+      console.log(formData);
       data.append("firstName", formData.firstName);
       data.append("lastName", formData.lastName);
       data.append("email", formData.email);
-      data.append("company_name", formData.company_name);
+      data.append("companyName", formData.companyName);
       data.append("mobile", formData.mobile);
-      data.append("isFeatured", formData.isFeatured);
+      // data.append("isFeatured", formData.isFeatured);
+      data.append("isFeatured", formData.isFeatured ? "true" : "false");
       if (formData.password) {
         data.append("password", formData.password);
       }
       if (formData.logo) {
         data.append("logo", formData.logo);
       }
-
+console.log(url)
       const res = await fetch(url, {
         method,
         // headers: { "Content-Type": "application/json" }, // Remove Content-Type for FormData
@@ -84,7 +86,7 @@ export default function EmployersForm({ editItem, setEditItem, reload }) {
         firstName: "",
         lastName: "",
         email: "",
-        company_name: "",
+        companyName: "",
         mobile: "",
         password: "",
         logo: null,
@@ -137,9 +139,9 @@ export default function EmployersForm({ editItem, setEditItem, reload }) {
 
       <input
         type="text"
-        name="company_name"
+        name="companyName"
         placeholder="Company Name"
-        value={formData.company_name}
+        value={formData.companyName}
         onChange={handleChange}
         className="w-full p-2 border mt-3 rounded"
         required
@@ -202,7 +204,7 @@ export default function EmployersForm({ editItem, setEditItem, reload }) {
                 firstName: "",
                 lastName: "",
                 email: "",
-                company_name: "",
+                companyName: "",
                 mobile: "",
                 password: "",
                 logo: null,

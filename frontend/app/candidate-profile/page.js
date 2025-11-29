@@ -9,7 +9,7 @@ export default function CandidateProfilePage() {
 
   useEffect(() => {
     if (session) {
-      fetch(`https://api.mindssparsh.com/api/users/${session.user.id}`)
+      fetch(`http://localhost:5000/api/users/${session.user.id}`)
         .then(res => res.json())
         .then(data => setUser(data));
     }

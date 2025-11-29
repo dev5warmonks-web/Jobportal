@@ -1,32 +1,27 @@
 "use client";
 import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+
 export default function QuickLinksToggle() {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="bg-[#E2F4FA] border border-gray-300 rounded-lg shadow-md p-4 w-full max-w-sm transition-all">
-
+      
       {/* Header */}
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex justify-between items-center font-medium text-lg"
       >
         Quick Links
-        {open ? (
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m18 15-6-6-6 6" />
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m6 9 6 6 6-6" />
-          </svg>
-        )}
+        {open ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
       </button>
 
       {/* Collapsible Content */}
       <div
-        className={`overflow-hidden transition-all duration-300 ${open ? "max-h-96 mt-4" : "max-h-0"
-          }`}
+        className={`overflow-hidden transition-all duration-300 ${
+          open ? "max-h-96 mt-4" : "max-h-0"
+        }`}
       >
         <ul className="flex flex-col gap-3 text-center">
           <li className="cursor-pointer hover:text-blue-600">Terms & Conditions</li>

@@ -1,6 +1,6 @@
-const API_URL = "https://api.mindssparsh.com/api/jobs";
-const API_USERS_URL = "https://api.mindssparsh.com/api/users";      // for users
-const API_AUTH_URL = "https://api.mindssparsh.com/api/auth";        // unused currently
+const API_URL = "http://localhost:5000/api/jobs";
+const API_USERS_URL = "http://localhost:5000/api/users";      // for users
+const API_AUTH_URL = "http://localhost:5000/api/auth";        // unused currently
 
 // ========================================
 // JOBS API
@@ -36,7 +36,7 @@ export const deleteJob = async (id) => {
 // ========================================
 
 export const loginUser = async (credentials) => {
-  const res = await fetch("https://api.mindssparsh.com/api/users/login", {
+  const res = await fetch("http://localhost:5000/api/users/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credentials)
@@ -91,7 +91,7 @@ export const updateUser = async (id, userData) => {
 // SEND OTP
 export async function sendOtp(data) {
   console.log(data);
-  const res = await fetch('https://api.mindssparsh.com/api/users/send-otp', {
+  const res = await fetch('http://localhost:5000/api/users/send-otp', { 
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)

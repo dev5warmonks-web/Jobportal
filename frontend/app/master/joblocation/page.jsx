@@ -15,7 +15,7 @@ export default function JobLocationPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`https://api.mindssparsh.com/api/job-locations`);
+      const res = await fetch(`http://localhost:5000/api/job-locations`);
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error || "Failed to load locations");
@@ -23,7 +23,7 @@ export default function JobLocationPage() {
       const data = await res.json();
       setLocations(data);
     } catch (err) {
-      //   console.error(err);
+    //   console.error(err);
       setError(err.message);
     } finally {
       setLoading(false);

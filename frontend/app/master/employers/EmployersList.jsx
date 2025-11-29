@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-const API_URL = "https://api.mindssparsh.com/api/users";
+const API_URL = "http://localhost:5000/api/users";
 
 export default function EmployersList({ setEditItem, reload }) {
   const [employers, setEmployers] = useState([]);
@@ -97,9 +97,9 @@ export default function EmployersList({ setEditItem, reload }) {
       {!loading && !error && employers.length > 0 && (
         <div className="overflow-x-auto">
           <table className="w-full bg-white rounded-xl shadow">
-            <thead className="bg-[#e8faff] text-left">
+            <thead className="bg-[#CCE9F2] text-left">
               <tr>
-                <th className="py-3 px-4">ID</th>
+                <th className="py-3 px-4">Sl No</th>
                 <th className="py-3 px-4">Logo</th>
                 <th className="py-3 px-4">First Name</th>
                 <th className="py-3 px-4">Last Name</th>
@@ -111,14 +111,16 @@ export default function EmployersList({ setEditItem, reload }) {
               </tr>
             </thead>
             <tbody>
-              {employers.map((employer) => (
+              {employers.map((employer,index) => (
                 employer.role === "employer" && (
                   <tr key={employer._id} className="border-t hover:bg-gray-50">
-                    <td className="py-3 px-4 text-sm">{employer._id.substring(0, 8)}...</td>
+                    {/* <td className="py-3 px-4 text-sm">{employer._id.substring(0, 8)}...</td> */}
+                     {/* Serial number instead of ID */}
+                    <td className="py-3 px-4 text-sm">{index + 1}</td>
                     <td className="py-3 px-4">
                       {employer.logo ? (
                         <img
-                          src={`https://api.mindssparsh.com/${employer.logo}`}
+                          src={`http://localhost:5000/${employer.logo}`}
                           alt="Logo"
                           className="w-10 h-10 object-cover rounded-full"
                         />
@@ -130,7 +132,7 @@ export default function EmployersList({ setEditItem, reload }) {
                     </td>
                     <td className="py-3 px-4">{employer.firstName}</td>
                     <td className="py-3 px-4">{employer.lastName}</td>
-                    <td className="py-3 px-4">{employer.company_name || "—"}</td>
+                    <td className="py-3 px-4">{employer.companyName || "—"}</td>
                     <td className="py-3 px-4">{employer.email}</td>
                     <td className="py-3 px-4">{employer.mobile || "—"}</td>
                     <td className="py-3 px-4">

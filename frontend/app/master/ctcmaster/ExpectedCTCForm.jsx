@@ -42,8 +42,8 @@ export default function ExpectedCTCForm({ editItem, setEditItem, reload }) {
     e.preventDefault();
     const method = editItem ? 'PUT' : 'POST';
     const url = editItem
-      ? `https://api.mindssparsh.com/api/expected-ctc/${editItem._id}`
-      : `https://api.mindssparsh.com/api/expected-ctc`;
+      ? `http://localhost:5000/api/expected-ctc/${editItem._id}`
+      : `http://localhost:5000/api/expected-ctc`;
 
     const payload = {
       ...form,

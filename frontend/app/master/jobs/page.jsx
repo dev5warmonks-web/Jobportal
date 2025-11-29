@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getJobs } from "../../api";
-const API_URL = "https://api.mindssparsh.com/api/jobs";
+const API_URL = "http://localhost:5000/api/jobs";
 
 
 export default function BasicDetails() {
@@ -55,19 +55,19 @@ export default function BasicDetails() {
     <div className="mx-auto bg-[#E2F4FA] h-screen">
       <div class="p-8 bg-[#d6f2fb] min-h-screen font-sans">
         <div class="flex justify-between p-5">
-          <h2 class="text-2xl font-semibold mb-6">Job Applications</h2>
-          <div class="flex items-center justify-center h-full">
-            <a href="/master/jobs/addnew"
-              class="bg-white text-black py-2 px-4 rounded-full hover:opacity-80 font-bold">
-              Post New
-            </a>
-          </div>
-        </div>
+          <h2 className="text-2xl font-semibold mb-6">Job Applications</h2>
+<div class="flex items-center justify-center h-full">
+  <a href="/master/jobs/addnew" 
+     class="bg-white text-black py-2 px-4 rounded-full hover:opacity-80 font-bold">
+    Post New
+  </a>
+</div>
+       </div>
         <div class="overflow-x-auto ">
           <table class="w-full bg-white rounded-xl shadow mr-[20px]">
             <thead class="bg-[#e8faff] text-left">
               <tr>
-                <th class="py-3 px-4">Job Id</th>
+                <th class="py-3 px-4">Sl No</th>
                 <th class="py-3 px-4">Title</th>
                 <th class="py-3 px-4">Company</th>
                 <th class="py-3 px-4">Location</th>
@@ -79,9 +79,10 @@ export default function BasicDetails() {
             </thead>
             <tbody>
 
-              {jobs.map((job) => (
+              {jobs.map((job,index) => (
                 <tr key={job._id} className="border-t">
-                  <td className="py-3 px-4">{job._id}</td>
+                  {/* <td className="py-3 px-4">{job._id}</td> */}
+                  <td className="py-3 px-4">{index + 1}</td>
                   <td className="py-3 px-4">{job.title}</td>
                   <td className="py-3 px-4">{job.company}</td>
                   <td className="py-3 px-4">{job.location}</td>

@@ -15,7 +15,7 @@ export default function JobCategoryPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`https://api.mindssparsh.com/api/job-categories`);
+      const res = await fetch(`http://localhost:5000/api/job-categories`);
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error || "Failed to load categories");
@@ -23,7 +23,7 @@ export default function JobCategoryPage() {
       const data = await res.json();
       setCategories(data);
     } catch (err) {
-      //   console.error(err);
+    //   console.error(err);
       setError(err.message);
     } finally {
       setLoading(false);

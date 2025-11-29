@@ -28,7 +28,7 @@ export default function Home() {
   const [applying, setApplying] = useState(false);
   const [applicationMessage, setApplicationMessage] = useState('');
 
-  const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.mindssparsh.com';
+  const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
 
   // const [showLogin, setShowLogin] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
@@ -532,8 +532,8 @@ export default function Home() {
         </ul>
         {applicationMessage && (
           <div className={`mb-4 p-3 rounded-lg text-center ${applicationMessage.includes('success')
-            ? 'bg-green-100 text-green-800'
-            : 'bg-red-100 text-red-800'
+              ? 'bg-green-100 text-green-800'
+              : 'bg-red-100 text-red-800'
             }`}>
             {applicationMessage}
           </div>

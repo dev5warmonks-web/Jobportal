@@ -36,8 +36,8 @@ export default function DateFilterForm({ editItem, setEditItem, reload }) {
     const method = editItem ? "PUT" : "POST";
 
     const url = editItem
-      ? `https://api.mindssparsh.com/api/sort-by-dates/${editItem._id}`
-      : `https://api.mindssparsh.com/api/sort-by-dates`;
+      ? `http://localhost:5000/api/sort-by-dates/${editItem._id}`
+      : `http://localhost:5000/api/sort-by-dates`;
 
     try {
       const res = await fetch(url, {

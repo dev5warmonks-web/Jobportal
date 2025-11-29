@@ -4,7 +4,7 @@ export default function JobLocationList({ locations, setEditItem, reload }) {
   const handleDelete = async (id) => {
     if (!confirm("Are you sure?")) return;
 
-    const res = await fetch(`https://api.mindssparsh.com/api/job-locations/${id}`, {
+    const res = await fetch(`http://localhost:5000/api/job-locations/${id}`, {
       method: "DELETE",
     });
 
@@ -19,7 +19,7 @@ export default function JobLocationList({ locations, setEditItem, reload }) {
       <h2 className="text-xl font-bold mb-4">Job Location</h2>
 
       <table className="w-full border">
-        <thead className="bg-gray-200">
+        <thead className="bg-[#CCE9F2]">
           <tr>
             <th className="p-2 border">Location</th>
             <th className="p-2 border">Active</th>
@@ -40,7 +40,7 @@ export default function JobLocationList({ locations, setEditItem, reload }) {
                   className="p-1.5 bg-black hover:bg-gray-900 text-white rounded-full shadow"
                   title="Edit"
                 >
-                  ✏️
+                   ✏️
                 </button>
 
                 {/* Delete Icon */}
@@ -49,7 +49,7 @@ export default function JobLocationList({ locations, setEditItem, reload }) {
                   className="p-2 rounded hover:bg-gray-100 transition"
                   title="Delete"
                 >
-                  🗑️
+                   🗑️
                 </button>
               </td>
             </tr>
