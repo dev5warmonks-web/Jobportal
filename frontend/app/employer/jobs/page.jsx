@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getJobs } from "../../api";
-const API_URL = "http://localhost:5000/api/jobs";
+const API_URL = "https://api.mindssparsh.com/api/jobs";
 
 
 export default function BasicDetails() {
@@ -56,12 +56,12 @@ export default function BasicDetails() {
       <div class="p-8 bg-[#d6f2fb] min-h-screen font-sans">
         <div class="flex justify-between p-5">
           <h2 class="text-2xl font-semibold mb-6">Job Applications</h2>
-<div class="flex items-center justify-center h-full">
-  <a href="/employer/jobs/addnew" 
-     class="bg-white text-black py-2 px-4 rounded-full hover:opacity-80 font-bold">
-    Post New
-  </a>
-</div>        </div>
+          <div class="flex items-center justify-center h-full">
+            <a href="/employer/jobs/addnew"
+              class="bg-white text-black py-2 px-4 rounded-full hover:opacity-80 font-bold">
+              Post New
+            </a>
+          </div>        </div>
         <div class="overflow-x-auto ">
           <table class="w-full bg-white rounded-xl shadow mr-[20px]">
             <thead class="bg-[#e8faff] text-left">

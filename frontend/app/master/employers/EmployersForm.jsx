@@ -56,8 +56,8 @@ export default function EmployersForm({ editItem, setEditItem, reload }) {
     try {
       const method = editItem ? "PUT" : "POST";
       const url = editItem
-        ? `http://localhost:5000/api/users/${editItem._id}`
-        : `http://localhost:5000/api/users`;
+        ? `https://api.mindssparsh.com/api/users/${editItem._id}`
+        : `https://api.mindssparsh.com/api/users`;
 
       const data = new FormData();
       console.log(formData);
@@ -74,7 +74,7 @@ export default function EmployersForm({ editItem, setEditItem, reload }) {
       if (formData.logo) {
         data.append("logo", formData.logo);
       }
-console.log(url)
+      console.log(url)
       const res = await fetch(url, {
         method,
         // headers: { "Content-Type": "application/json" }, // Remove Content-Type for FormData

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-const API_URL = "http://localhost:5000/api/users";
+const API_URL = "https://api.mindssparsh.com/api/users";
 
 export default function EmployersList({ setEditItem, reload }) {
   const [employers, setEmployers] = useState([]);
@@ -111,16 +111,16 @@ export default function EmployersList({ setEditItem, reload }) {
               </tr>
             </thead>
             <tbody>
-              {employers.map((employer,index) => (
+              {employers.map((employer, index) => (
                 employer.role === "employer" && (
                   <tr key={employer._id} className="border-t hover:bg-gray-50">
                     {/* <td className="py-3 px-4 text-sm">{employer._id.substring(0, 8)}...</td> */}
-                     {/* Serial number instead of ID */}
+                    {/* Serial number instead of ID */}
                     <td className="py-3 px-4 text-sm">{index + 1}</td>
                     <td className="py-3 px-4">
                       {employer.logo ? (
                         <img
-                          src={`http://localhost:5000/${employer.logo}`}
+                          src={`https://api.mindssparsh.com/${employer.logo}`}
                           alt="Logo"
                           className="w-10 h-10 object-cover rounded-full"
                         />

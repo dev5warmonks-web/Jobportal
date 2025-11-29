@@ -4,7 +4,7 @@ export default function ExpectedCTCList({ ctcs, setEditItem, reload }) {
   const handleDelete = async (id) => {
     if (!confirm("Are you sure?")) return;
 
-    const res = await fetch(`http://localhost:5000/api/expected-ctc/${id}`, {
+    const res = await fetch(`https://api.mindssparsh.com/api/expected-ctc/${id}`, {
       method: "DELETE",
     });
     if (res.ok) reload();
@@ -26,7 +26,7 @@ export default function ExpectedCTCList({ ctcs, setEditItem, reload }) {
             <tr key={ctc._id}>
               <td className="p-2 border">
                 {ctc.minCTC === ctc.maxCTC ? ctc.minCTC : `${ctc.minCTC}-${ctc.maxCTC}`}
-                </td>
+              </td>
               <td className="p-2 border">{ctc.is_active ? "Yes" : "No"}</td>
               <td className="p-2 border flex gap-3">
                 {/* Edit Icon */}
@@ -34,7 +34,7 @@ export default function ExpectedCTCList({ ctcs, setEditItem, reload }) {
                   className="p-1.5 bg-black hover:bg-gray-900 text-white rounded-full shadow"
                   title="Edit"
                 >
-                   ✏️
+                  ✏️
                 </button>
 
                 {/* Delete Icon */}
@@ -43,9 +43,9 @@ export default function ExpectedCTCList({ ctcs, setEditItem, reload }) {
                   className="p-2 rounded hover:bg-gray-100 transition"
                   title="Delete"
                 >
-                   🗑️
+                  🗑️
                 </button>
-                
+
               </td>
             </tr>
           ))}

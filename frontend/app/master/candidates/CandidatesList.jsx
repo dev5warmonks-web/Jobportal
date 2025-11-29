@@ -4,7 +4,7 @@ export default function CandidatesList({ candidates, setEditItem, reload }) {
   const handleDelete = async (id) => {
     if (!confirm("Are you sure?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/candidates/${id}`, {
+      const res = await fetch(`https://api.mindssparsh.com/api/candidates/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Failed to delete");
@@ -41,7 +41,7 @@ export default function CandidatesList({ candidates, setEditItem, reload }) {
               </td>
             </tr>
           ) : (
-            candidates.map((candidate,index) => (
+            candidates.map((candidate, index) => (
               <tr key={candidate._id} className="hover:bg-gray-100 border">
                 <td className="py-3 px-4 text-sm">{index + 1}</td>
                 <td className="p-3 border">{candidate.firstName} {candidate.lastName}</td>
@@ -55,12 +55,12 @@ export default function CandidatesList({ candidates, setEditItem, reload }) {
                     Edit
                   </button> */}
                   <button
-                      onClick={() => handleEdit(candidate)}
-                      className="p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow"
-                      title="Edit"
-                    >
-                      ✏️
-                    </button>
+                    onClick={() => handleEdit(candidate)}
+                    className="p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow"
+                    title="Edit"
+                  >
+                    ✏️
+                  </button>
                   <button
                     onClick={() => handleDelete(candidate._id)}
                     className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
