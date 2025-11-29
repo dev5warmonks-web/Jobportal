@@ -7,7 +7,11 @@ export const authOptions = {
       name: "Credentials",
       async authorize(credentials) {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.mindssparsh.com'}/api/users/login`, {
+          const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'https://api.mindssparsh.com'}/api/users/login`;
+          console.log('🔐 Attempting login to:', apiUrl);
+          console.log('📧 Credentials:', { emailOrPhone: credentials.emailOrPhone });
+
+          const res = await fetch(apiUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -16,11 +20,17 @@ export const authOptions = {
             }),
           });
 
+          console.log('📡 Response status:', res.status);
+
           const data = await res.json();
+          console.log('📦 Response data:', JSON.stringify(data, null, 2));
 
           if (!res.ok || !data.user) {
+            console.error('❌ Login failed:', data.message || 'Invalid login');
             throw new Error(data.message || "Invalid login");
           }
+
+          console.log('✅ Login successful for user:', data.user.email);
 
           /// ---- Return user object to NextAuth ---- ///
           return {
@@ -31,7 +41,8 @@ export const authOptions = {
             token: data.token            // <-- your JWT
           };
         } catch (error) {
-          console.error("Auth Error:", error);
+          console.error("❌ Auth Error:", error.message);
+          console.error("Full error:", error);
           return null;
         }
       },
@@ -63,7 +74,10 @@ export const authOptions = {
 
   pages: {
     signIn: "/",  // avoid redirect errors
+    error: "/",   // redirect to home page on error instead of default error page
   },
+
+  debug: true, // Enable debug mode to see detailed logs in Vercel
 };
 
 const handler = NextAuth(authOptions);

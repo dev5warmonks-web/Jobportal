@@ -17,6 +17,10 @@ app.use(express.json());
 // Mount job routes
 app.use("/api/jobs", jobRoutes);
 
+// Mount users routes
+const userRoutes = require("./routes/users");
+app.use("/api/users", userRoutes);
+
 // Routes
 
 app.use("/api/jobcategory", jobCategoryRoutes);
