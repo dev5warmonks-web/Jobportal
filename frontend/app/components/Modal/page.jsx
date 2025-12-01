@@ -8,12 +8,16 @@ export default function Modal({ open, onClose, children, title }) {
   const [loggedUser, setLoggedUser] = useState(null);
 
   useEffect(() => {
+    if (!open) return;
+
     const storedUser = sessionStorage.getItem("user");
-    alert(storedUser);
+    console.log("MODAL READ USER:", storedUser);
+
     if (storedUser && storedUser !== "undefined") {
       setLoggedUser(JSON.parse(storedUser));
     }
-  }, []);
+  }, [open]);
+
   // disable background scroll when modal is open
   useEffect(() => {
     if (!open) return;
