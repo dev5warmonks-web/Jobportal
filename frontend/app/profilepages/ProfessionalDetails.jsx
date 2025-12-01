@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 
 export default function ProfessionalDetails() {
   const { data: session } = useSession();
+  const [userId, setUserId] = useState(null); // 👈 STORE USER ID
+
   const [form, setForm] = useState({
     experiencelevel: "",
     highesteducation: "",
@@ -29,18 +31,24 @@ export default function ProfessionalDetails() {
 
   // Fetch existing professional details
   useEffect(() => {
+    const storedUser = sessionStorage.getItem("user");
+
+    if (!storedUser || storedUser === "undefined") return;
+
+    const parsedUser = JSON.parse(storedUser);
+
+    // 👉 GET THE USER ID HERE
+    setUserId(parsedUser._id);
+    console.log(userId);
+
     const fetchProfessionalData = async () => {
-      if (!session?.user?.id) {
-        setLoading(false);
-        return;
-      }
+      // if (!session?.user?.id) {
+      //   setLoading(false);
+      //   return;
+      // }
 
       try {
-        const response = await fetch(`https://api.mindssparsh.com/api/professional/user/${session.user.id}`, {
-          headers: {
-            'Authorization': `Bearer ${session.user.token}`,
-          },
-        });
+        const response = await fetch(`https://api.mindssparsh.com/api/professional/user/${parsedUser._id}`);
 
         if (response.ok) {
           const data = await response.json();
@@ -86,13 +94,13 @@ export default function ProfessionalDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!session?.user?.id) {
+    if (!userId) {
       alert("You must be logged in to save professional details");
       return;
     }
 
     const body = {
-      userId: session.user.id,
+      userId: userId,
       experienceLevel: form.experiencelevel,
       highestEducation: form.highesteducation,
       currentCompany: form.currentcompany,
@@ -103,13 +111,12 @@ export default function ProfessionalDetails() {
 
     try {
       let res;
-      if (professionalId) {
+      if (userId) {
         // Update existing
-        res = await fetch(`https://api.mindssparsh.com/api/professional/${professionalId}`, {
+        res = await fetch(`https://api.mindssparsh.com/api/professional/${userId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${session.user.token}`
           },
           body: JSON.stringify(body),
         });
@@ -119,7 +126,6 @@ export default function ProfessionalDetails() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${session.user.token}`
           },
           body: JSON.stringify(body),
         });
@@ -154,7 +160,7 @@ export default function ProfessionalDetails() {
         {/* Experience & Education */}
         <div className="flex flex-col md:flex-row gap-4 text-black">
           <div className="flex-1">
-            <label className="block font-medium mb-1">Your experience level</label>
+            <label className="block font-medium mb-1">Your experience level </label>
             <select
               name="experiencelevel"
               value={form.experiencelevel}
@@ -168,6 +174,7 @@ export default function ProfessionalDetails() {
                   {exp.jobExperience}
                 </option>
               ))}
+              <option value="Test">Test</option>
             </select>
           </div>
 

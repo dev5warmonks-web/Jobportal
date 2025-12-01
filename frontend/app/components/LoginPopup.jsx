@@ -10,53 +10,46 @@ export default function LoginPopup({ onClose, onRegister, login }) {
   // const [password, setPassword] = useState('');
   const [mobile, setMobile] = useState('');
   const [emailOrPhone, setEmailOrPhone] = useState('');
-  
+
   const [error, setError] = useState('');
   const [showUserType, setShowUserType] = useState(false);
   // const { login } = useSession();
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError('');
+    e.preventDefault();
+    setError("");
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const phoneRegex = /^\d{10}$/;
+    try {
+      const res = await fetch("https://api.mindssparsh.com/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: emailOrPhone,
+          mobile: "9876543210",
+        }),
+      });
 
-  if (!emailOrPhone) {
-    setError('Email or mobile number is required');
-    return;
-  }
+      const data = await res.json();
+      console.log(data);
+      if (!res.ok) {
+        setError(data.message || "Login failed");
+        return;
+      }
 
-  const isEmail = emailRegex.test(emailOrPhone);
-  const isPhone = phoneRegex.test(emailOrPhone);
+      // Store user in localStorage / cookie
+      localStorage.setItem("user", JSON.stringify(data));
+      sessionStorage.setItem("user", JSON.stringify(data));
 
-  if (!isEmail && !isPhone) {
-    setError('Enter a valid email or 10-digit phone number');
-    return;
-  }
+      // Redirect
+      window.location.href = "/profilepages";
 
-  try {
-    // const result = await signIn('credentials', {
-    //   redirect: false,
-    //   email: isEmail ? emailOrPhone : undefined,
-    //   mobile: isPhone ? emailOrPhone : undefined,
-    // });
-    const result = await signIn("credentials", {
-      redirect: false,
-      emailOrPhone: emailOrPhone.trim(),
-    });
-
-    if (result?.error) {
-      setError(result.error);
-    } else {
-      setError('');
-      onClose(); // close popup on successful login
+    } catch (err) {
+      console.log(err);
+      setError("Something went wrong");
     }
-  } catch (err) {
-    console.error(err);
-    setError('Login failed');
-  }
-};
+  };
 
   const handleRegisterClick = () => {
     // Show user type selection before opening registration
@@ -64,19 +57,19 @@ export default function LoginPopup({ onClose, onRegister, login }) {
   };
 
   const handleUserTypeSelect = (type) => {
-  onRegister(type); // passes 'candidate' or 'employer' to page.js
-};
+    onRegister(type); // passes 'candidate' or 'employer' to page.js
+  };
 
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/20 z-50">
       <div className="w-full max-w-md p-8 space-y-6 bg-[#E2F4FB] rounded-lg shadow-md relative">
-        
+
         {/* Header with title and close button */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Sign In to Your Account</h2>
-          <button onClick={onClose} 
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-[#CCE9F2] hover:bg-gray-300 text-xl"
+          <button onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-[#CCE9F2] hover:bg-gray-300 text-xl"
           >&times;</button>
         </div>
 

@@ -1,11 +1,19 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 export default function Modal({ open, onClose, children, title }) {
   const overlayRef = useRef(null);
   const dialogRef = useRef(null);
+  const [loggedUser, setLoggedUser] = useState(null);
 
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem("user");
+    alert(storedUser);
+    if (storedUser && storedUser !== "undefined") {
+      setLoggedUser(JSON.parse(storedUser));
+    }
+  }, []);
   // disable background scroll when modal is open
   useEffect(() => {
     if (!open) return;
@@ -71,7 +79,7 @@ export default function Modal({ open, onClose, children, title }) {
       >
         {/* header */}
         <div className="flex items-start justify-between gap-4">
-         
+
 
           <button
             onClick={onClose}

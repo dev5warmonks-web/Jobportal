@@ -59,6 +59,15 @@ export default function Home() {
     setRegisterType(null);
   };
 
+  const [loggedUser, setLoggedUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem("user");
+    if (storedUser && storedUser !== "undefined") {
+      setLoggedUser(JSON.parse(storedUser));
+    }
+  }, []);   // runs only once
+
   useEffect(() => {
     if (session?.user?.email) {
       setNewsletterEmail(session.user.email);
@@ -99,20 +108,18 @@ export default function Home() {
     setOpen(true);
   };
 
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem("user");
+
+    if (!storedUser || storedUser === "undefined") return;
+
+    const parsedUser = JSON.parse(storedUser);
+
+  }, [session]);
+
   const handleApply = async () => {
-    // Check if user is logged in
-    if (!session?.user?.id) {
-      alert('Please log in to apply for jobs');
-      setShowLogin(true);
-      return;
-    }
 
-    // Check if job is selected
-    if (!selectedJob?._id) {
-      alert('No job selected');
-      return;
-    }
-
+    console.log(loggedUser);
     setApplying(true);
     setApplicationMessage('');
 
@@ -121,10 +128,9 @@ export default function Home() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.user.token}`
         },
         body: JSON.stringify({
-          userId: session.user.id,
+          userId: loggedUser._id,
           jobId: selectedJob._id
         })
       });

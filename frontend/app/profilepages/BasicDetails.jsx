@@ -1,9 +1,26 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+
 
 export default function BasicDetails() {
-  const { data: session } = useSession();
+
+
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem("user");
+
+    if (!storedUser || storedUser === "undefined") return;
+
+    const parsedUser = JSON.parse(storedUser);
+    setForm({
+      firstName: parsedUser.firstName || "",
+      lastName: parsedUser.lastName || "",
+      email: parsedUser.email || "",
+      contact: parsedUser.mobile || "",
+      subscriptionEmail: parsedUser.subscription_email || "",
+    });
+    setIsSubscribed(parsedUser.isSubscribed || false);
+    setLoading(false);
+  }, []);
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -14,41 +31,8 @@ export default function BasicDetails() {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Fetch user data on component mount
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (!session?.user?.id) {
-        setLoading(false);
-        return;
-      }
 
-      try {
-        const response = await fetch(`https://api.mindssparsh.com/api/users/${session.user.id}`, {
-          headers: {
-            'Authorization': `Bearer ${session.user.token}`,
-          },
-        });
 
-        if (response.ok) {
-          const userData = await response.json();
-          setForm({
-            firstName: userData.firstName || "",
-            lastName: userData.lastName || "",
-            email: userData.email || "",
-            contact: userData.mobile || "",
-            subscriptionEmail: userData.subscription_email || "",
-          });
-          setIsSubscribed(userData.isSubscribed || false);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, [session]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

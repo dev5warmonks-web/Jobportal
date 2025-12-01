@@ -1,15 +1,12 @@
-
 const express = require("express");
 const Users = require("../models/Users");
 const router = express.Router();
 
-// CREATE user
-router.post("/", async (req, res) => {
-  const users = await Users.create(req.body);
-  res.json(users);
-});
+// ========================================
+// SPECIFIC ROUTES (must come first!)
+// ========================================
 
-// LOGIN user
+// LOGIN user - MUST be before /:id route
 router.post("/login", async (req, res) => {
   try {
     const { email, mobile } = req.body;
@@ -72,13 +69,23 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// ========================================
+// GENERIC ROUTES (must come after specific routes!)
+// ========================================
+
+// CREATE user
+router.post("/", async (req, res) => {
+  const users = await Users.create(req.body);
+  res.json(users);
+});
+
 // READ all users
 router.get("/", async (req, res) => {
   const users = await Users.find();
   res.json(users);
 });
 
-// READ single user
+// READ single user - MUST come after /login
 router.get("/:id", async (req, res) => {
   const users = await Users.findById(req.params.id);
   res.json(users);
