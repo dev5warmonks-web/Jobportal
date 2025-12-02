@@ -37,14 +37,14 @@ export default function RootLayout({
         />
       </head>
       <body
-        className="overflow-x-hidden bg-gradient-to-b from-[#E2F4FA] via-white to-[#E2F4FA] antialiased"
+        className="overflow-x-hidden bg-[linear-gradient(to_bottom,_#EFF2F3_0%,_#EAFAFF_40%,_white_100%)] antialiased"
       >
 
         <SessionProvider>
           <Navbar />
           {children}
         </SessionProvider>
-        <footer className="w-full  py-2 bg-white">
+        <footer className="w-full py-2">
           <div className="mx-auto p-[10px] md:p-[50px] flex flex-col md:flex-row items-center justify-between text-sm">
 
             {/* Left copyright */}

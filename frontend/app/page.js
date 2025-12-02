@@ -204,7 +204,7 @@ export default function Home() {
 
 
       {/* HERO SECTION */}
-      <section className="p-[10px] md:p-[50px] items-center bg-[#F5F9FB]">
+      <section className="p-[10px] md:p-[50px] items-center">
         <h1 className="text-center text-[30px] md:text-[40px] font-bold mb-[16px]">
           Find your next tech job now!
         </h1>
