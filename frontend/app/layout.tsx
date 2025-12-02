@@ -37,7 +37,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className="overflow-x-hidden bg-[linear-gradient(to_bottom,_#EFF2F3_0%,_#EAFAFF_40%,_white_100%)] antialiased"
+        className="overflow-x-hidden bg-[linear-gradient(to_bottom_right,_#EFF2F3_0%,_#EAFAFF_40%,_white_100%)] antialiased"
       >
 
         <SessionProvider>
