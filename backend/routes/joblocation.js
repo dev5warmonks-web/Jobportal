@@ -1,67 +1,79 @@
 const express = require("express");
-const JobCategory = require("../models/JobCategory");
+const JobLocation = require("../models/JobLocation");
 const router = express.Router();
 
-// CREATE job category
+// CREATE job location
 router.post("/", async (req, res) => {
   try {
-    const jobCategory = await JobCategory.create(req.body);
-    res.status(201).json(jobCategory);
+    const { location } = req.body;
+
+    const existingLocation = await JobLocation.findOne({
+      location: { $regex: `^${location}$`, $options: "i" }
+    });
+
+    if (existingLocation) {
+      return res.status(400).json({ error: "Location already exists" });
+    }
+
+    const newLocation = await JobLocation.create({ location });
+
+    res.status(201).json(newLocation);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-// READ all job categories
+// READ all job location
 router.get("/", async (req, res) => {
   try {
-    const jobCategories = await JobCategory.find();
-    res.json(jobCategories);
+    const jobLocations = await JobLocation.find({}).lean(); // <— fetch everything, faster
+    res.json(jobLocations);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// READ single job category
+
+// READ single job location
 router.get("/:id", async (req, res) => {
   try {
-    const jobCategory = await JobCategory.findById(req.params.id);
-    if (!jobCategory)
-      return res.status(404).json({ error: "Job category not found" });
+    const jobLocation = await JobLocation.findById(req.params.id);
+    if (!jobLocation)
+      return res.status(404).json({ error: "Job location not found" });
 
-    res.json(jobCategory);
+    res.json(jobLocation);
   } catch (err) {
     res.status(400).json({ error: "Invalid ID" });
   }
 });
 
-// UPDATE job category
+// UPDATE job location
 router.put("/:id", async (req, res) => {
   try {
-    const jobCategory = await JobCategory.findByIdAndUpdate(
+    const jobLocation = await JobLocation.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
 
-    if (!jobCategory)
-      return res.status(404).json({ error: "Job category not found" });
+    if (!jobLocation)
+      return res.status(404).json({ error: "Job location not found" });
 
-    res.json(jobCategory);
+    res.json(jobLocation);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-// DELETE job category
+// DELETE job location
 router.delete("/:id", async (req, res) => {
   try {
-    const deleted = await JobCategory.findByIdAndDelete(req.params.id);
+    const deleted = await JobLocation.findByIdAndDelete(req.params.id);
 
     if (!deleted)
-      return res.status(404).json({ error: "Job category not found" });
+      return res.status(404).json({ error: "Job location not found" });
 
-    res.json({ message: "Job category deleted" });
+    res.json({ message: "Job location deleted" });
   } catch (err) {
     res.status(400).json({ error: "Invalid ID" });
   }

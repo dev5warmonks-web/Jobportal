@@ -15,6 +15,12 @@ const jobCategorySchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-});
+},
+{
+    collation: { locale: "en", strength: 2 } // 👈 Case-insensitive
+  }
+);
+// Create unique index with collation
+jobCategorySchema.index({ jobCategory: 1 }, { unique: true, collation: { locale: "en", strength: 2 } });
 
 module.exports = mongoose.model("JobCategory", jobCategorySchema);

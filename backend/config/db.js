@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/jobportal", {
+    await mongoose.connect("mongodb://localhost:27017/jobportaldb", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

@@ -5,12 +5,24 @@ const router = express.Router();
 // CREATE job category
 router.post("/", async (req, res) => {
   try {
-    const jobCategory = await JobCategory.create(req.body);
-    res.status(201).json(jobCategory);
+    const { jobCategory } = req.body;
+
+    const existingCategory = await JobCategory.findOne({
+      jobCategory: { $regex: `^${jobCategory}$`, $options: "i" }
+    });
+
+    if (existingCategory) {
+      return res.status(400).json({ error: "Category already exists" });
+    }
+
+    const newCategory = await JobCategory.create({ jobCategory });
+
+    res.status(201).json(newCategory);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
+
 
 // READ all job categories
 router.get("/", async (req, res) => {
