@@ -37,6 +37,8 @@ export default function Home() {
 
   const [otpData, setOtpData] = useState(null);
 
+
+
   const tags = [
     "UI Designer", "UI Developer", "Frontend Developer", "Full Stack", "Mobile App Developer",
     "UI Designer", "Cloud Engineer", "Data Scientist", "ML Engineer", "SOC Analyst", "Security Engineer",
