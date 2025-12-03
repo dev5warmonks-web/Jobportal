@@ -79,7 +79,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="w-full border-b border-gray-200 bg-gradient-to-b from-[#E2F4FA] via-white to-[#E2F4FA] antialiased">
+      <nav className="w-full  antialiased">
         <div className="mx-auto p-[10px] md:p-[50px] py-4 flex items-center justify-between">
 
           {/* Left Logo */}
