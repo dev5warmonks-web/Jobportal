@@ -53,7 +53,7 @@ export default function Topbar({ user }) {
               className="w-10 h-10 rounded-full object-cover border-2 border-black"
             />
           </div> */}
-          <UserMenu user={user} profileImage={profileImage}/>
+          {/* <UserMenu user={user} profileImage={profileImage}/> */}
         </div>
 
         <div className="mt-5 px-4 bg-[#CCE9F2] p-5 ml-5 mr-5">

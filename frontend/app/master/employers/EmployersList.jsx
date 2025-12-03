@@ -7,30 +7,53 @@ const API_URL = "https://api.mindssparsh.com/api/users";
 export default function EmployersList({ setEditItem, reload }) {
   const [employers, setEmployers] = useState([]);
   const [roles, setRoles] = useState([]);
+  // const [employerRoleId, setEmployerRoleId] = useState(null);
+  // const [employerRoleName, setEmployerRoleName] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // -----------------------------
+ // -----------------------------
   // Load Roles (Admin, Employer, Candidate)
   // -----------------------------
   useEffect(() => {
-    getUserRole()
-      .then((data) => setRoles(data))
-      .catch((err) => console.error("Failed to fetch roles:", err));
+    async function loadRoles() {
+      try {
+        const allRoles = await getUserRole();
+        setRoles(allRoles);
+
+        // Find employer role ID
+        const employerRole = allRoles.find(
+          r => r.name?.toLowerCase() === "employer"
+        );
+        alert(employerRole.name);
+        if (!employerRole) throw new Error("Employer role not found");
+        const employerRoleId = employerRole._id;
+        // if (employerRole) {
+        //   setEmployerRoleId(employerRole._id);
+        //   setEmployerRoleName(employerRole.name);
+        // }
+      } catch (err) {
+        console.error("Failed to fetch roles:", err);
+      }
+    }
+
+    loadRoles();
   }, []);
+ // -----------------------------
+  // Load Employers (after role ID loads)
   // -----------------------------
-  // Load Employers
-  // -----------------------------
+  // useEffect(() => {
+  //   if (employerRoleId) {
+  //     console.log("Loading employers with role ID:", employerRoleId);
+  //     loadEmployers(employerRoleId);
+  //   }
+  // }, [employerRoleId, reload]);
 
-  useEffect(() => {
-    loadEmployers();
-  }, [reload]);
-
-  const loadEmployers = async () => {
+  const loadEmployers = async (roleId) => {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(`${API_URL}?user_role=employer`);
+      const response = await fetch(`${API_URL}?user_role=${employerRoleId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch employers");
       }
@@ -96,10 +119,10 @@ export default function EmployersList({ setEditItem, reload }) {
   };
 
   // Helper: Convert role ID → role name
-  const getRoleName = (roleId) => {
-    const role = roles.find((r) => r._id === roleId);
-    return role?.name || "Unknown";
-  };
+  // const getRoleName = (roleId) => {
+  //   const role = roles.find((r) => r._id === roleId);
+  //   return role?.name || "Unknown";
+  
 
   return (
     <div className="bg-white rounded-lg shadow">
@@ -110,11 +133,11 @@ export default function EmployersList({ setEditItem, reload }) {
       {loading && <p className="p-6 text-center">Loading employers...</p>}
       {error && <p className="p-6 text-center text-red-600">{error}</p>}
 
-      {!loading && !error && employers.length === 0 && (
+      {!loading && employers.length === 0 && (
         <p className="p-6 text-center text-gray-600">No employers found</p>
       )}
 
-      {!loading && !error && employers.length > 0 && (
+      {!loading && employers.length > 0 && (
         <div className="overflow-x-auto">
           <table className="w-full bg-white rounded-xl shadow">
             <thead className="bg-[#CCE9F2] text-left">

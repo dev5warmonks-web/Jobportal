@@ -12,7 +12,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="w-auto bg-[#E2F4FA] text-black h-screen p-6">
+    <div className="w-auto bg-[#E2F4FA] text-black min-h-screen p-6">
 
       <div className="flex flex-col space-y-3">
         {menu.map((item) => {

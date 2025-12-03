@@ -52,7 +52,7 @@ export default function BasicDetails() {
   };
 
   return (
-    <div className="mx-auto bg-[#E2F4FA] h-screen">
+    <div className="mx-auto bg-[#E2F4FA] ">
       <div class="p-8 bg-[#d6f2fb] min-h-screen font-sans">
         <div class="flex justify-between p-5">
           <h2 class="text-2xl font-semibold mb-6">Job Applications</h2>
