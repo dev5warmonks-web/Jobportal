@@ -28,6 +28,7 @@ export default function Home() {
   const [suggestions, setSuggestions] = useState([]);
   const [applying, setApplying] = useState(false);
   const [applicationMessage, setApplicationMessage] = useState('');
+  const [featuredEmployers, setFeaturedEmployers] = useState([]);
 
   const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.mindssparsh.com';
 
@@ -37,6 +38,22 @@ export default function Home() {
 
   const [otpData, setOtpData] = useState(null);
 
+useEffect(() => {
+  const fetchFeaturedEmployers = async () => {
+    try {
+      const res = await fetch(`${BACKEND_BASE}/api/users/role-name/employer`);
+      if (!res.ok) throw new Error('Failed to fetch employers');
+      const data = await res.json();
+      console.log('Fetched employers:', data);
+      const featured = data.filter(user => user.isFeatured);
+      setFeaturedEmployers(featured);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchFeaturedEmployers();
+}, []);
 
 
   const tags = [
@@ -360,7 +377,7 @@ export default function Home() {
           Featured Companies
         </h3>
 
-        <div className="flex flex-wrap items-center justify-center gap-1 md:gap-6">
+        {/* <div className="flex flex-wrap items-center justify-center gap-1 md:gap-6">
           {[
             "alliance.png",
             "ustglobal.png",
@@ -373,6 +390,18 @@ export default function Home() {
             <div key={i} className="bg-[#E2F4FA] md:p-2">
               <img
                 src={`/images/${img}`}
+                className="w-[160px] h-[80px] object-contain"
+              />
+            </div>
+          ))}
+        </div> */}
+
+        <div className="flex flex-wrap items-center justify-center gap-1 md:gap-6">
+          {featuredEmployers.map((employer) => (
+            <div key={employer._id} className="bg-[#E2F4FA] md:p-2">
+              <img
+                src={`${BACKEND_BASE}/uploads/${employer.logo}`}
+                alt={employer.companyName || 'Company Logo'}
                 className="w-[160px] h-[80px] object-contain"
               />
             </div>
