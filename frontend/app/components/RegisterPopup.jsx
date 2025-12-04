@@ -55,7 +55,14 @@ export default function RegisterPopup({ onClose, onLogin }) {
 
 
       if (res.success) {
-        onLogin();
+        // onLogin();
+        setError("User registered successfully");
+
+        // After 2 seconds, redirect to login page
+        setTimeout(() => {
+          setError(""); // Clear the message
+          onLogin(); // Call the login function or redirect
+        }, 2000);
       } else {
         setError(res);
         setError('Invalid OTP');

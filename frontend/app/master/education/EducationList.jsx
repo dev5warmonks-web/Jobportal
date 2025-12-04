@@ -4,7 +4,7 @@ export default function EducationList({ education, setEditItem, reload }) {
   const handleDelete = async (id) => {
     if (!confirm("Are you sure?")) return;
 
-    const res = await fetch(`http://localhost:5000/api/education/${id}`, {
+    const res = await fetch(`https://api.mindssparsh.com/api/education/${id}`, {
       method: "DELETE",
     });
 
@@ -58,7 +58,7 @@ export default function EducationList({ education, setEditItem, reload }) {
           {education.length === 0 && (
             <tr>
               <td colSpan="3" className="text-center p-4 text-black">
-                No categories found.
+                No data found.
               </td>
             </tr>
           )}

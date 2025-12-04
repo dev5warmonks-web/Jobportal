@@ -10,12 +10,12 @@ export default function EducationPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch categories from backend
+  // Fetch all data from backend
   const loadEducation = async () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`http://localhost:5000/api/education`);
+      const res = await fetch(`https://api.mindssparsh.com/api/education`);
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error || "Failed to load");

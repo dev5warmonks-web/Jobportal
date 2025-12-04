@@ -92,8 +92,16 @@ export default function LoginPopup({ onClose, onRegister, login }) {
       const allRoles = await getUserRole();
 
       // 🔥 Match role ID with user role
-      const matchedRole = allRoles.find(r => r._id === data.user_role);
-      const roleName = matchedRole?.name?.toLowerCase() || "candidate";
+      // const matchedRole = allRoles.find(r => r._id === data.user_role);
+      // const roleName = matchedRole?.name?.toLowerCase() || "candidate";
+      
+      let roleName = "candidate"; 
+      if (data.user_role) {
+        const matchedRole = allRoles.find(r => r._id === data.user_role);
+        roleName = matchedRole?.name?.toLowerCase() || "candidate";
+      } else {
+        console.warn("User role missing in login response, defaulting to 'candidate'");
+      }
 
       console.log("Matched role:", roleName);
 
@@ -109,8 +117,9 @@ export default function LoginPopup({ onClose, onRegister, login }) {
       onClose();
 
     } catch (err) {
-      console.error(err);
-      setError("Something went wrong");
+      // console.error(err);
+      // setError("Something went wrong");
+      setError("User not found. Please register first.");
     }
   };
 

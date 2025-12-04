@@ -36,8 +36,8 @@ export default function SkillsForm({ editItem, setEditItem, reload }) {
     const method = editItem ? "PUT" : "POST";
 
     const url = editItem
-      ? `http://localhost:5000/api/skills/${editItem._id}`
-      : `http://localhost:5000/api/skills`;
+      ? `https://api.mindssparsh.com/api/skills/${editItem._id}`
+      : `https://api.mindssparsh.com/api/skills`;
 
     try {
       const res = await fetch(url, {

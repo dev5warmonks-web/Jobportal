@@ -4,7 +4,7 @@ export default function SkillsList({ skills, setEditItem, reload }) {
   const handleDelete = async (id) => {
     if (!confirm("Are you sure?")) return;
 
-    const res = await fetch(`http://localhost:5000/api/skills/${id}`, {
+    const res = await fetch(`https://api.mindssparsh.com/api/skills/${id}`, {
       method: "DELETE",
     });
 

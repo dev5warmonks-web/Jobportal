@@ -30,6 +30,8 @@ export default function EditJob() {
   const [editItem, setEditItem] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [experienceOptions, setExperienceOptions] = useState([]);
+  const [locations, setLocations] = useState([]);
 
   // Fetch categories from backend
   const loadCategories = async () => {
@@ -83,6 +85,20 @@ export default function EditJob() {
     });
   }, [id]);
 
+  useEffect(() => {
+  fetch("https://api.mindssparsh.com/api/job-experiences")
+    .then(res => res.json())
+    .then(data => setExperienceOptions(data))
+    .catch(err => console.error("Error loading experiences", err));
+}, []);
+
+useEffect(() => {
+  fetch("https://api.mindssparsh.com/api/job-locations")
+    .then(res => res.json())
+    .then(data => setLocations(data))
+    .catch(err => console.error("Error loading location", err));
+}, []);
+
   const handleChange = (e) => {
     setJob({ ...job, [e.target.name]: e.target.value });
   };
@@ -134,8 +150,16 @@ export default function EditJob() {
         <div className="flex gap-3">
           <div className="w-1/2">
             <label className="block mb-1">Location</label>
-            <input value={job.location} onChange={handleChange} name="location"
-              className="w-full border rounded bg-[#CCE9F2] px-3 py-2" />
+            <select name="location" value={job.location} onChange={handleChange}
+              className="w-full border rounded bg-[#CCE9F2] px-3 py-2">
+              {locations.map((loc) => (
+                <option key={loc.location} value={loc.location}>
+                  {loc.location}
+                </option>
+              ))}
+            </select>
+            {/* <input value={job.location} onChange={handleChange} name="location"
+              className="w-full border rounded bg-[#CCE9F2] px-3 py-2" /> */}
           </div>
 
           <div className="w-1/2">
@@ -166,9 +190,15 @@ export default function EditJob() {
             <label className="block mb-1">Experience</label>
             <select name="experience" value={job.experience} onChange={handleChange}
               className="w-full border rounded bg-[#CCE9F2] px-3 py-2">
-              <option value="0-1">0-1</option>
+              {/* <option value="0-1">0-1</option>
               <option value="1-2">1-2</option>
-              <option value="2-3">2-3</option>
+              <option value="2-3">2-3</option> */}
+              <option value="">Select</option>
+              {experienceOptions.map((exp) => (
+                <option key={exp._id} value={exp.jobExperience}>
+                  {exp.jobExperience}
+                </option>
+              ))}
             </select>
           </div>
         </div>

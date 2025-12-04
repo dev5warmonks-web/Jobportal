@@ -15,7 +15,7 @@ export default function Sidebar() {
     { name: "Job Location", path: "/master/joblocation" },
     { name: "Expected CTC", path: "/master/ctcmaster" },
     { name: "Experience", path: "/master/jobexperience" },
-    { name: "Sort By Date", path: "/master/sortbydate" },
+    // { name: "Sort By Date", path: "/master/sortbydate" },
     { name: "Education", path: "/master/education" },
     { name: "Industry", path: "/master/industry" },
     { name: "Skills", path: "/master/skills" },

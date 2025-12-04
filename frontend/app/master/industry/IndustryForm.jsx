@@ -36,8 +36,8 @@ export default function IndustryForm({ editItem, setEditItem, reload }) {
     const method = editItem ? "PUT" : "POST";
 
     const url = editItem
-      ? `http://localhost:5000/api/industry/${editItem._id}`
-      : `http://localhost:5000/api/industry`;
+      ? `https://api.mindssparsh.com/api/industry/${editItem._id}`
+      : `https://api.mindssparsh.com/api/industry`;
 
     try {
       const res = await fetch(url, {

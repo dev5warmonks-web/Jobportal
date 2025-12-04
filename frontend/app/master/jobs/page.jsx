@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getJobs } from "../../api";
-const API_URL = "http://api.mindssparsh.com/api/jobs";
+const API_URL = "https://api.mindssparsh.com/api/jobs";
 
 
 export default function BasicDetails() {
@@ -15,6 +15,7 @@ export default function BasicDetails() {
 
 
   const handleDelete = async (id) => {
+    console.log("Deleting job with id:", id);
     if (window.confirm("Are you sure you want to delete this job?")) {
       try {
         const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });

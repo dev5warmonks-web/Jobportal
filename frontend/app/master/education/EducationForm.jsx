@@ -36,8 +36,8 @@ export default function EducationForm({ editItem, setEditItem, reload }) {
     const method = editItem ? "PUT" : "POST";
 
     const url = editItem
-      ? `http://localhost:5000/api/education/${editItem._id}`
-      : `http://localhost:5000/api/education`;
+      ? `https://api.mindssparsh.com/api/education/${editItem._id}`
+      : `https://api.mindssparsh.com/api/education`;
 
     try {
       const res = await fetch(url, {
