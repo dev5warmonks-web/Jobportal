@@ -57,13 +57,13 @@ export default function BasicDetails() {
       <div className="p-8 bg-[#d6f2fb] min-h-screen font-sans">
         <div className="flex justify-between p-5">
           <h2 className="text-2xl font-semibold mb-6">Job Applications</h2>
-<div className="flex items-center justify-center h-full">
-  <a href="/master/jobs/addnew" 
-     className="bg-white text-black py-2 px-4 rounded-full hover:opacity-80 font-bold">
-    Post New
-  </a>
-</div>
-       </div>
+          <div className="flex items-center justify-center h-full">
+            <a href="/master/jobs/addnew"
+              className="bg-white text-black py-2 px-4 rounded-full hover:opacity-80 font-bold">
+              Post New
+            </a>
+          </div>
+        </div>
         <div className="overflow-x-auto ">
           <table className="w-full bg-white rounded-xl shadow mr-[20px]">
             <thead className="bg-[#e8faff] text-left">
@@ -80,7 +80,7 @@ export default function BasicDetails() {
             </thead>
             <tbody>
 
-              {jobs.map((job,index) => (
+              {jobs.map((job, index) => (
                 <tr key={job._id} className="border-t">
                   {/* <td className="py-3 px-4">{job._id}</td> */}
                   <td className="py-3 px-4">{index + 1}</td>
@@ -88,7 +88,7 @@ export default function BasicDetails() {
                   <td className="py-3 px-4">{job.company}</td>
                   <td className="py-3 px-4">{job.location}</td>
                   <td className="py-3 px-4">{job.salary}</td>
-                  <td className="py-3 px-4">{job.type}</td>
+                  <td className="py-3 px-4">{job.jobcategory}</td>
                   <td className="py-3 px-4">{job.status}</td>
                   <td className="py-3 px-4 text-center space-x-3">
 

@@ -28,7 +28,7 @@ function FilterPageContent() {
     const [applicationMessage, setApplicationMessage] = useState('');
 
     const searchParams = useSearchParams();
-    const categoryParam = searchParams.get('category');
+    const categoryParams = searchParams.getAll('category');
 
     const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.mindssparsh.com';
 
@@ -56,10 +56,10 @@ function FilterPageContent() {
 
     // Handle URL Query Param for Category
     useEffect(() => {
-        if (categoryParam) {
-            setSelectedCategories([categoryParam]);
+        if (categoryParams.length > 0) {
+            setSelectedCategories(categoryParams);
         }
-    }, [categoryParam]);
+    }, [searchParams]);
 
     // Handle URL Query Param for Search
     useEffect(() => {
@@ -108,6 +108,22 @@ function FilterPageContent() {
             result = result.filter(job => selectedCategories.includes(job.jobcategory));
         }
 
+        // Skill Filter (from URL)
+        const skillParams = searchParams.getAll('skill');
+        if (skillParams.length > 0) {
+            result = result.filter(job =>
+                job.skills?.some(skill => skillParams.some(p => p.toLowerCase() === skill.toLowerCase()))
+            );
+        }
+
+        // Company Filter (from URL)
+        const companyParams = searchParams.getAll('company');
+        if (companyParams.length > 0) {
+            result = result.filter(job =>
+                companyParams.some(c => c.toLowerCase() === job.company?.toLowerCase())
+            );
+        }
+
         // Job Type Filter
         if (selectedJobTypes.length > 0) {
             result = result.filter(job => selectedJobTypes.includes(job.jobtype));
@@ -130,7 +146,7 @@ function FilterPageContent() {
         });
 
         setFilteredJobs(result);
-    }, [jobs, searchQuery, selectedCategories, selectedJobTypes, selectedExperience, salaryRange]);
+    }, [jobs, searchQuery, selectedCategories, selectedJobTypes, selectedExperience, salaryRange, searchParams]);
 
     const handleCategoryChange = (category) => {
         setSelectedCategories(prev =>
