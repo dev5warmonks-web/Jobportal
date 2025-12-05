@@ -87,20 +87,20 @@ export default function EditJob() {
   }, [id]);
 
   useEffect(() => {
-  fetch("https://api.mindssparsh.com/api/job-experiences")
-    .then(res => res.json())
-    .then(data => setExperienceOptions(data))
-    .catch(err => console.error("Error loading experiences", err));
-}, []);
+    fetch("https://api.mindssparsh.com/api/job-experiences")
+      .then(res => res.json())
+      .then(data => setExperienceOptions(data))
+      .catch(err => console.error("Error loading experiences", err));
+  }, []);
 
-useEffect(() => {
-  fetch("https://api.mindssparsh.com/api/job-locations")
-    .then(res => res.json())
-    .then(data => setLocations(data))
-    .catch(err => console.error("Error loading location", err));
-}, []);
+  useEffect(() => {
+    fetch("https://api.mindssparsh.com/api/job-locations")
+      .then(res => res.json())
+      .then(data => setLocations(data))
+      .catch(err => console.error("Error loading location", err));
+  }, []);
 
-useEffect(() => {
+  useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setOpen(false);
@@ -184,6 +184,9 @@ useEffect(() => {
               <option value="fulltime">Full Time</option>
               <option value="parttime">Part Time</option>
               <option value="remote">Remote</option>
+              <option value="contract">Contract</option>
+              <option value="freelance">Freelance</option>
+              <option value="internship">Internship</option>
             </select>
           </div>
         </div>

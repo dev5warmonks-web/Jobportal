@@ -3,6 +3,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 
+import Link from "next/link";
+
 export default function TagsSlider() {
     const [categories, setCategories] = useState([]);
     const [editItem, setEditItem] = useState(null);
@@ -39,26 +41,26 @@ export default function TagsSlider() {
             <div className="marquee">
                 <div className="marquee-content">
                     {categories.map((cat) => (
-
-                        <span
-                            key={cat._id}
-                            className="px-4 py-2 mx-2 bg-white border border-gray-300 rounded-md bg-[linear-gradient(to_bottom_right,_#EFF2F3_0%,_#EAFAFF_40%,_white_100%)]"
-                        >
-                            {cat.jobCategory}
-                        </span>
+                        <Link key={cat._id} href={`/filter?category=${encodeURIComponent(cat.jobCategory)}`}>
+                            <span
+                                className="px-4 py-2 mx-2 bg-white border border-gray-300 rounded-md bg-[linear-gradient(to_bottom_right,_#EFF2F3_0%,_#EAFAFF_40%,_white_100%)] cursor-pointer hover:shadow-md transition-shadow inline-block"
+                            >
+                                {cat.jobCategory}
+                            </span>
+                        </Link>
                     ))}
                 </div>
             </div>
             <div className="marquee">
                 <div className="marquee-content reverse">
                     {categories.map((cat) => (
-
-                        <span
-                            key={cat._id}
-                            className="px-4 py-2 mx-2 bg-white border border-gray-300 rounded-md bg-[linear-gradient(to_bottom_right,_#EFF2F3_0%,_#EAFAFF_40%,_white_100%)]"
-                        >
-                            {cat.jobCategory}
-                        </span>
+                        <Link key={cat._id} href={`/filter?category=${encodeURIComponent(cat.jobCategory)}`}>
+                            <span
+                                className="px-4 py-2 mx-2 bg-white border border-gray-300 rounded-md bg-[linear-gradient(to_bottom_right,_#EFF2F3_0%,_#EAFAFF_40%,_white_100%)] cursor-pointer hover:shadow-md transition-shadow inline-block"
+                            >
+                                {cat.jobCategory}
+                            </span>
+                        </Link>
                     ))}
                 </div>
             </div>
@@ -66,13 +68,13 @@ export default function TagsSlider() {
             <div className="marquee">
                 <div className="marquee-content">
                     {categories.map((cat) => (
-
-                        <span
-                            key={cat._id}
-                            className="px-4 py-2 mx-2 bg-white border border-gray-300 rounded-md bg-[linear-gradient(to_bottom_right,_#EFF2F3_0%,_#EAFAFF_40%,_white_100%)]"
-                        >
-                            {cat.jobCategory}
-                        </span>
+                        <Link key={cat._id} href={`/filter?category=${encodeURIComponent(cat.jobCategory)}`}>
+                            <span
+                                className="px-4 py-2 mx-2 bg-white border border-gray-300 rounded-md bg-[linear-gradient(to_bottom_right,_#EFF2F3_0%,_#EAFAFF_40%,_white_100%)] cursor-pointer hover:shadow-md transition-shadow inline-block"
+                            >
+                                {cat.jobCategory}
+                            </span>
+                        </Link>
                     ))}
                 </div>
             </div>

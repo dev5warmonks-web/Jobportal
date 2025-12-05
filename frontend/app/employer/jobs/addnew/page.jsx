@@ -159,6 +159,9 @@ export default function BasicDetails() {
               <option value="fulltime">Full Time</option>
               <option value="parttime">Part Time</option>
               <option value="remote">Remote</option>
+              <option value="contract">Contract</option>
+              <option value="freelance">Freelance</option>
+              <option value="internship">Internship</option>
             </select>
           </div>
         </div>

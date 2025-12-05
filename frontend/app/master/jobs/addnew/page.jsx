@@ -89,7 +89,7 @@ export default function BasicDetails() {
       .catch(err => console.error("Failed to fetch location:", err));
   }, []);
 
-   // Fetch job category options
+  // Fetch job category options
   useEffect(() => {
     fetch("https://api.mindssparsh.com/api/job-categories")
       .then(res => res.json())
@@ -216,6 +216,9 @@ export default function BasicDetails() {
               <option value="fulltime">Full Time</option>
               <option value="parttime">Part Time</option>
               <option value="remote">Remote</option>
+              <option value="contract">Contract</option>
+              <option value="freelance">Freelance</option>
+              <option value="internship">Internship</option>
             </select>
           </div>
         </div>

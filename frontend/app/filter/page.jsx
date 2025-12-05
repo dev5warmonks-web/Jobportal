@@ -4,10 +4,13 @@ import { useSession } from 'next-auth/react';
 import { getJobs } from "../api";
 import Modal from "../components/Modal/page";
 
+import { useSearchParams } from 'next/navigation';
+
 export default function FilterPage() {
     const [jobs, setJobs] = useState([]);
     const [filteredJobs, setFilteredJobs] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [experiences, setExperiences] = useState([]);
 
     // Filter States
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -22,6 +25,9 @@ export default function FilterPage() {
     const [applying, setApplying] = useState(false);
     const [applicationMessage, setApplicationMessage] = useState('');
 
+    const searchParams = useSearchParams();
+    const categoryParam = searchParams.get('category');
+
     const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.mindssparsh.com';
 
     useEffect(() => {
@@ -32,11 +38,24 @@ export default function FilterPage() {
         });
 
         // Fetch Categories
-        fetch(`${BACKEND_BASE}/api/jobcategories`)
+        fetch(`${BACKEND_BASE}/api/job-categories`)
             .then(res => res.json())
             .then(data => setCategories(data))
             .catch(err => console.error("Failed to fetch categories", err));
+
+        // Fetch Experiences
+        fetch(`${BACKEND_BASE}/api/job-experiences`)
+            .then(res => res.json())
+            .then(data => setExperiences(data))
+            .catch(err => console.error("Failed to fetch experiences", err));
     }, []);
+
+    // Handle URL Query Param for Category
+    useEffect(() => {
+        if (categoryParam) {
+            setSelectedCategories([categoryParam]);
+        }
+    }, [categoryParam]);
 
     // Filter Logic
     useEffect(() => {
@@ -264,35 +283,61 @@ export default function FilterPage() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full p-2 border border-gray-300 rounded-md text-sm outline-none focus:border-black"
                         />
-                        <h3 className="font-semibold mb-3">Job Type</h3>
-                        <div className="space-y-2">
-                            {["Full-Time", "Part-Time", "Contract", "Internship", "Remote Only", "Freelance"].map(type => (
-                                <label key={type} className="flex items-center gap-2 cursor-pointer">
+
+                        {/* Job Categories */}
+                        <h3 className="font-semibold mb-3 mt-6">Job Categories</h3>
+                        <div className="space-y-2 mb-6 max-h-48 overflow-y-auto">
+                            {categories.map((cat) => (
+                                <label key={cat._id} className="flex items-center gap-2 cursor-pointer">
                                     <input
                                         type="checkbox"
-                                        checked={selectedJobTypes.includes(type)}
-                                        onChange={() => handleJobTypeChange(type)}
+                                        checked={selectedCategories.includes(cat.jobCategory)}
+                                        onChange={() => handleCategoryChange(cat.jobCategory)}
                                         className="w-4 h-4 accent-black"
                                     />
-                                    <span className="text-sm text-gray-600">{type}</span>
+                                    <span className="text-sm text-gray-600">{cat.jobCategory}</span>
                                 </label>
                             ))}
+                        </div>
+
+                        <h3 className="font-semibold mb-3">Job Type</h3>
+                        <div className="space-y-2">
+                            <div className="space-y-2">
+                                {[
+                                    { label: "Full Time", value: "fulltime" },
+                                    { label: "Part Time", value: "parttime" },
+                                    { label: "Remote", value: "remote" },
+                                    { label: "Contract", value: "contract" },
+                                    { label: "Freelance", value: "freelance" },
+                                    { label: "Internship", value: "internship" }
+                                ].map(type => (
+                                    <label key={type.value} className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedJobTypes.includes(type.value)}
+                                            onChange={() => handleJobTypeChange(type.value)}
+                                            className="w-4 h-4 accent-black"
+                                        />
+                                        <span className="text-sm text-gray-600">{type.label}</span>
+                                    </label>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
                     {/* Experience Level */}
                     <div className="mb-6">
                         <h3 className="font-semibold mb-3">Experience Level</h3>
-                        <div className="space-y-2">
-                            {["Fresher", "0-1 years", "1-3 years", "3-5 years", "5+ years", "10+ years"].map(exp => (
-                                <label key={exp} className="flex items-center gap-2 cursor-pointer">
+                        <div className="space-y-2 max-h-48 overflow-y-auto">
+                            {experiences.map((exp) => (
+                                <label key={exp._id} className="flex items-center gap-2 cursor-pointer">
                                     <input
                                         type="checkbox"
-                                        checked={selectedExperience.includes(exp)}
-                                        onChange={() => handleExperienceChange(exp)}
+                                        checked={selectedExperience.includes(exp.jobExperience)}
+                                        onChange={() => handleExperienceChange(exp.jobExperience)}
                                         className="w-4 h-4 accent-black"
                                     />
-                                    <span className="text-sm text-gray-600">{exp}</span>
+                                    <span className="text-sm text-gray-600">{exp.jobExperience}</span>
                                 </label>
                             ))}
                         </div>
