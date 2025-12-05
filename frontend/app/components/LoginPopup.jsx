@@ -88,10 +88,10 @@ export default function LoginPopup({ onClose, onRegister, login }) {
       localStorage.setItem("user", JSON.stringify(data));
       sessionStorage.setItem("user", JSON.stringify(data));
 
-      // 🔥 Fetch all roles like UserMenu
+      //  Fetch all roles like UserMenu
       const allRoles = await getUserRole();
 
-      // 🔥 Match role ID with user role
+      //  Match role ID with user role
       // const matchedRole = allRoles.find(r => r._id === data.user_role);
       // const roleName = matchedRole?.name?.toLowerCase() || "candidate";
       
@@ -105,7 +105,16 @@ export default function LoginPopup({ onClose, onRegister, login }) {
 
       console.log("Matched role:", roleName);
 
-      // 🔥 Redirect based on role
+      // SET COOKIE FOR MIDDLEWARE 
+    document.cookie = `role=${roleName}; path=/`;
+
+    //secure cookie for HTTPS:
+    //document.cookie = `role=${roleName}; path=/; secure; samesite=lax`;
+
+    //cookie to expire after a day:
+    //document.cookie = `role=${roleName}; path=/; max-age=86400`;
+
+      //  Redirect based on role
       if (roleName === "employer") {
         window.location.href = "/employer/jobs";
       } else if (["admin", "super admin"].includes(roleName)) {

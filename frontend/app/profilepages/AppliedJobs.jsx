@@ -2,9 +2,26 @@
 import { useState, useEffect } from "react";
 
 export default function AppliedJobs() {
+  const BACKEND_BASE = "https://api.mindssparsh.com";
   const [applications, setApplications] = useState([]);
+  const [allEmployers, setAllEmployers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Fetch Employers 
+  useEffect(() => {
+    const fetchEmployers = async () => {
+      try {
+        const res = await fetch(`${BACKEND_BASE}/api/users/role-name/employer`);
+        const data = await res.json();
+        setAllEmployers(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchEmployers();
+  }, []);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -20,9 +37,7 @@ export default function AppliedJobs() {
 
     const fetchApplications = async () => {
       try {
-        const response = await fetch(
-          `https://api.mindssparsh.com/api/applications/user/${userId}`
-        );
+        const response = await fetch(`${BACKEND_BASE}/api/applications/user/${userId}`);
 
         if (response.ok) {
           const data = await response.json();
@@ -40,6 +55,14 @@ export default function AppliedJobs() {
 
     fetchApplications();
   }, []);
+
+  const getLogoForJob = (userId) => {
+    const user = allEmployers.find((u) => u._id === userId);
+    if (user?.logo) {
+      return `${BACKEND_BASE}/uploads/${user.logo}`;
+    }
+    return "/images/oracle.jpg";
+  };
 
   if (loading) {
     return <div className="text-center p-4">Loading applications...</div>;
@@ -65,32 +88,28 @@ export default function AppliedJobs() {
                 className="w-full p-[12px] bg-[#E2F4FA] border border-gray-300 rounded-lg shadow-md flex"
               >
                 <img
-                  src={
-                    app.jobId?.companyLogo
-                      ? `https://api.mindssparsh.com${app.jobId.companyLogo}`
-                      : "/images/oracle.jpg"
-                  }
-                  alt="Job"
+                  src={getLogoForJob(app.jobId?.userid)}
+                  alt={app.jobId?.company || "Logo"}
                   className="w-[60px] h-[60px] object-cover rounded-md"
-                  onError={(e) => {
-                    e.target.src = "/images/oracle.jpg";
-                  }}
                 />
 
                 <div className="ml-4 flex flex-col md:flex-row justify-between text-black w-full">
                   <div>
                     <h4 className="font-semibold text-[18px] leading-[26px] font-['Poppins']">
-                      {app.jobId?.jobTitle || "Job Title Not Available"}
+                      {app.jobId?.title || "Job Title Not Available"}
                     </h4>
                     <p className="text-gray-600 text-[12px] leading-[26px]">
                       <span className="font-bold">
-                        {app.jobId?.companyName || "Company"}
+                        {app.jobId?.company || "Company"}
                       </span>
-                      {Array.isArray(app.jobId?.location)
-                        ? app.jobId.location.join(", ")
-                        : app.jobId?.location || "Location"}
-                      , {app.jobId?.salaryRange?.min} -{" "}
-                      {app.jobId?.salaryRange?.max}, {app.jobId?.jobType}
+                      {" — "}
+                      {[
+                        Array.isArray(app.jobId?.location)
+                          ? app.jobId.location.join(", ")
+                          : app.jobId?.location,
+                        app.jobId?.salary,
+                        app.jobId?.jobtype,
+                      ].filter(Boolean).join(", ")}
                     </p>
                   </div>
 
