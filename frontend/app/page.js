@@ -38,6 +38,29 @@ export default function Home() {
 
   const [otpData, setOtpData] = useState(null);
   const [allEmployers, setAllEmployers] = useState([]);
+  const [totalApplications, setTotalApplications] = useState(0);
+
+  useEffect(() => {
+  if (open && selectedJob) {
+    console.log("Modal opened for job:", selectedJob);
+    console.log("Company:", selectedJob.company);
+  }
+}, [open, selectedJob]);
+
+// useEffect(() => {
+//   if (selectedJob?._id) {
+//     const fetchApplications = async () => {
+//       try {
+//         const count = await getTotalApplications(selectedJob._id);
+//         setTotalApplications(count);
+//       } catch (err) {
+//         console.error(err);
+//       }
+//     };
+//     fetchApplications();
+//   }
+// }, [selectedJob]);
+
 
 useEffect(() => {
   const fetchFeaturedEmployers = async () => {
@@ -65,6 +88,34 @@ const getLogoForJob = (userId) => {
   }
   return "/images/oracle.jpg"; // fallback logo
 };
+
+const getTimeSincePosting = (createdAt) => {
+  const now = new Date();
+  const postedDate = new Date(createdAt);
+  const diffMs = now - postedDate; // difference in milliseconds
+
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffHours < 24) {
+    return `${diffHours} hr${diffHours !== 1 ? 's' : ''} ago`;
+  } else {
+    return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+  }
+};
+
+// const getTotalApplications = async (jobId) => {
+//   console.log(jobId);
+//   try {
+//     const res = await fetch(`${BACKEND_BASE}/api/applications/count/${jobId}`);
+//     if (!res.ok) throw new Error("Failed to fetch applications count");
+//     const data = await res.json();
+//     return data.totalApplications || 0;
+//   } catch (err) {
+//     console.error(err);
+//     return 0;
+//   }
+// };
 
 
 
@@ -507,9 +558,14 @@ const getLogoForJob = (userId) => {
 
       <Modal open={open} storedUser={loggedUser} onClose={() => setOpen(false)} >
         <div className="flex flex-col md:flex-row mb-[20px]">
-          <img
+          {/* <img
             src="/images/oracle.jpg" className="w-[87px]"
-            alt="Job" />
+            alt="Job" /> */}
+            <img
+              src={getLogoForJob(selectedJob?.userid)}
+              alt={selectedJob?.company || "Employer Logo"}
+              className="w-[60px] h-[60px] object-cover rounded-md"
+            />
           <div className="md:ml-4 mt-[10px]">
             <h4 className="font-semibold text-[18px] leading-[26px] font-['Poppins']">
               {selectedJob?.title}
@@ -518,20 +574,25 @@ const getLogoForJob = (userId) => {
               <span className="font-bold"> {selectedJob?.company} </span>
             </p>
             <div className="flex flex-wrap gap-[16px] mt-1">
+              {selectedJob?.jobtype && (
               <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
-                Full-time
+                {selectedJob?.jobtype}
               </span>
+              )}
+              {selectedJob?.salary && (
               <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
-                25-55k
+                {selectedJob?.salary}
               </span>
+              )}
               <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
-                6hr ago
+                {getTimeSincePosting(selectedJob?.createdAt)}
               </span>
               <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
                 101 Views
               </span>
               <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
                 12 applications
+                {/* {totalApplications} application{totalApplications !== 1 ? "s" : ""} */}
               </span>
             </div>
           </div>

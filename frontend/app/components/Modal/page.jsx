@@ -10,7 +10,8 @@ export default function Modal({ open, onClose, children, title }) {
   useEffect(() => {
     if (!open) return;
 
-    const storedUser = sessionStorage.getItem("user");
+    // const storedUser = sessionStorage.getItem("user");
+    const storedUser = localStorage.getItem("user");
     console.log("MODAL READ USER:", storedUser);
 
     if (storedUser && storedUser !== "undefined") {
