@@ -37,6 +37,7 @@ export default function Home() {
   const [registerType, setRegisterType] = useState(null); // 'candidate' | 'employer' | null
 
   const [otpData, setOtpData] = useState(null);
+  const [allEmployers, setAllEmployers] = useState([]);
 
 useEffect(() => {
   const fetchFeaturedEmployers = async () => {
@@ -45,6 +46,7 @@ useEffect(() => {
       if (!res.ok) throw new Error('Failed to fetch employers');
       const data = await res.json();
       console.log('Fetched employers:', data);
+      setAllEmployers(data);
       const featured = data.filter(user => user.isFeatured);
       setFeaturedEmployers(featured);
     } catch (err) {
@@ -54,6 +56,16 @@ useEffect(() => {
 
   fetchFeaturedEmployers();
 }, []);
+
+
+const getLogoForJob = (userId) => {
+  const user = allEmployers.find(u => u._id === userId);
+  if (user?.logo) {
+    return `${BACKEND_BASE}/uploads/${user.logo}`;
+  }
+  return "/images/oracle.jpg"; // fallback logo
+};
+
 
 
   const tags = [
@@ -313,9 +325,14 @@ useEffect(() => {
 
                 className="w-full p-[12px] bg-[#E2F4FA] border border-gray-300 rounded-lg shadow-md flex"
               >
-                <img
+                {/* <img
                   src="/images/oracle.jpg"
                   alt="Job"
+                  className="w-[60px] h-[60px] object-cover rounded-md"
+                /> */}
+                <img
+                  src={getLogoForJob(job.userid)}
+                  alt={job.company}
                   className="w-[60px] h-[60px] object-cover rounded-md"
                 />
 
@@ -326,7 +343,13 @@ useEffect(() => {
                     </h4>
                     <p className="text-gray-600 text-[12px] leading-[26px]">
                       <span className="font-bold"> {job.company} </span>
-                      {job.location}, {job.salary}, {job.type}, {job.category}
+                      {[
+          job.location,
+          job.salary,
+          job.type,
+          job.category,
+        ].filter(Boolean).join(", ")}
+                      {/* {job.location}, {job.salary}, {job.type}, {job.category} */}
                     </p>
                   </div>
 
