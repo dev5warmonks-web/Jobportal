@@ -33,6 +33,14 @@ export default function EditJob() {
   const [error, setError] = useState("");
   const [experienceOptions, setExperienceOptions] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [salaryOptions, setSalaryOptions] = useState([]);
+
+  useEffect(() => {
+    fetch("https://api.mindssparsh.com/api/expected-ctc")
+      .then(res => res.json())
+      .then(data => setSalaryOptions(data))
+      .catch(err => console.error("Error loading salary options", err));
+  }, []);
 
   // Fetch categories from backend
   const loadCategories = async () => {
@@ -148,8 +156,19 @@ export default function EditJob() {
         <div className="flex gap-3">
           <div className="w-1/2">
             <label className="block mb-1">Salary</label>
-            <input value={job.salary} onChange={handleChange} name="salary"
-              className="w-full border rounded bg-[#CCE9F2] px-3 py-2" />
+            <select
+              name="salary"
+              value={job.salary}
+              onChange={handleChange}
+              className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
+            >
+              <option value="">Select Salary</option>
+              {salaryOptions.map((opt) => (
+                <option key={opt._id} value={`${opt.minCTC} - ${opt.maxCTC}`}>
+                  {opt.minCTC} - {opt.maxCTC}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="w-1/2">

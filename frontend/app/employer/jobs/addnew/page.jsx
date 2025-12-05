@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { addJob } from "../../../api";
 
 
@@ -71,6 +71,14 @@ export default function BasicDetails() {
 
   const [selected, setSelected] = useState([]);
   const [open, setOpen] = useState(false);
+  const [salaryOptions, setSalaryOptions] = useState([]);
+
+  useEffect(() => {
+    fetch("https://api.mindssparsh.com/api/expected-ctc")
+      .then(res => res.json())
+      .then(data => setSalaryOptions(data))
+      .catch(err => console.error("Error loading salary options", err));
+  }, []);
 
   const toggleSkill = (skill) => {
     if (selected.includes(skill)) {
@@ -113,14 +121,20 @@ export default function BasicDetails() {
         <div className="flex flex wrap gap-3">
           <div className="w-1/2">
             <label className="block font-medium mb-1">Salary</label>
-            <input
-              type="text"
+            <select
               name="salary"
               value={job.salary}
               onChange={handleChange}
               className="w-full border rounded bg-[#CCE9F2] px-3 py-2"
               required
-            />
+            >
+              <option value="">Select Salary</option>
+              {salaryOptions.map((opt) => (
+                <option key={opt._id} value={`${opt.minCTC} - ${opt.maxCTC}`}>
+                  {opt.minCTC} - {opt.maxCTC}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="w-1/2">

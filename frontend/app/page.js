@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { getJobs } from "./api";
 import Modal from "./components/Modal/page";
 import LoginPopup from "./components/LoginPopup";
@@ -11,6 +12,7 @@ import TagsSlider from "./components/TagsSlider";
 
 
 export default function Home() {
+  const router = useRouter();
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
@@ -26,6 +28,8 @@ export default function Home() {
 
   const [searchInput, setSearchInput] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+
   const [applying, setApplying] = useState(false);
   const [applicationMessage, setApplicationMessage] = useState('');
   const [featuredEmployers, setFeaturedEmployers] = useState([]);
@@ -41,83 +45,53 @@ export default function Home() {
   const [totalApplications, setTotalApplications] = useState(0);
 
   useEffect(() => {
-  if (open && selectedJob) {
-    console.log("Modal opened for job:", selectedJob);
-    console.log("Company:", selectedJob.company);
-  }
-}, [open, selectedJob]);
-
-// useEffect(() => {
-//   if (selectedJob?._id) {
-//     const fetchApplications = async () => {
-//       try {
-//         const count = await getTotalApplications(selectedJob._id);
-//         setTotalApplications(count);
-//       } catch (err) {
-//         console.error(err);
-//       }
-//     };
-//     fetchApplications();
-//   }
-// }, [selectedJob]);
-
-
-useEffect(() => {
-  const fetchFeaturedEmployers = async () => {
-    try {
-      const res = await fetch(`${BACKEND_BASE}/api/users/role-name/employer`);
-      if (!res.ok) throw new Error('Failed to fetch employers');
-      const data = await res.json();
-      console.log('Fetched employers:', data);
-      setAllEmployers(data);
-      const featured = data.filter(user => user.isFeatured);
-      setFeaturedEmployers(featured);
-    } catch (err) {
-      console.error(err);
+    if (open && selectedJob) {
+      console.log("Modal opened for job:", selectedJob);
+      console.log("Company:", selectedJob.company);
     }
+  }, [open, selectedJob]);
+
+  useEffect(() => {
+    const fetchFeaturedEmployers = async () => {
+      try {
+        const res = await fetch(`${BACKEND_BASE}/api/users/role-name/employer`);
+        if (!res.ok) throw new Error('Failed to fetch employers');
+        const data = await res.json();
+        console.log('Fetched employers:', data);
+        setAllEmployers(data);
+        const featured = data.filter(user => user.isFeatured);
+        setFeaturedEmployers(featured);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchFeaturedEmployers();
+  }, []);
+
+
+  const getLogoForJob = (userId) => {
+    const user = allEmployers.find(u => u._id === userId);
+    if (user?.logo) {
+      return `${BACKEND_BASE}/uploads/${user.logo}`;
+    }
+    return "/images/oracle.jpg"; // fallback logo
   };
 
-  fetchFeaturedEmployers();
-}, []);
+  const getTimeSincePosting = (createdAt) => {
+    const now = new Date();
+    const postedDate = new Date(createdAt);
+    const diffMs = now - postedDate; // difference in milliseconds
 
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-const getLogoForJob = (userId) => {
-  const user = allEmployers.find(u => u._id === userId);
-  if (user?.logo) {
-    return `${BACKEND_BASE}/uploads/${user.logo}`;
-  }
-  return "/images/oracle.jpg"; // fallback logo
-};
-
-const getTimeSincePosting = (createdAt) => {
-  const now = new Date();
-  const postedDate = new Date(createdAt);
-  const diffMs = now - postedDate; // difference in milliseconds
-
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-  if (diffHours < 24) {
-    return `${diffHours} hr${diffHours !== 1 ? 's' : ''} ago`;
-  } else {
-    return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
-  }
-};
-
-// const getTotalApplications = async (jobId) => {
-//   console.log(jobId);
-//   try {
-//     const res = await fetch(`${BACKEND_BASE}/api/applications/count/${jobId}`);
-//     if (!res.ok) throw new Error("Failed to fetch applications count");
-//     const data = await res.json();
-//     return data.totalApplications || 0;
-//   } catch (err) {
-//     console.error(err);
-//     return 0;
-//   }
-// };
-
-
+    if (diffHours < 24) {
+      return `${diffHours} hr${diffHours !== 1 ? 's' : ''} ago`;
+    } else {
+      return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+    }
+  };
 
   const tags = [
     "UI Designer", "UI Developer", "Frontend Developer", "Full Stack", "Mobile App Developer",
@@ -125,12 +99,6 @@ const getTimeSincePosting = (createdAt) => {
     "UX Designer", "Product Designer", "Manual Tester", "QA Engineer", "IT Support", "Network Engineer",
     "Systems Admin", "AI Engineer", "AR/VR Developer"
   ];
-
-  // const handleOtpScreen = (data) => {
-  //   setOtpData(data); // store the data for OTP verification
-  //   setRegisterType('otp'); // you can conditionally render OTP popup
-  //   setShowLogin(false); // close login if open
-  // };
 
   const handleOtpScreen = (data, type) => {
     setOtpData(data);
@@ -171,6 +139,8 @@ const getTimeSincePosting = (createdAt) => {
     }
   }, [loggedUser]);
 
+  // --- SEARCH LOGIC ---
+
   const handleSearchInput = (value) => {
     setSearchInput(value);
     if (value.trim() === '') {
@@ -178,34 +148,57 @@ const getTimeSincePosting = (createdAt) => {
       return;
     }
 
-    const filtered = jobs.filter((job) => {
-      const searchLower = value.toLowerCase();
-      return (
-        job.title?.toLowerCase().includes(searchLower) ||
-        job.company?.toLowerCase().includes(searchLower) ||
-        (Array.isArray(job.skills) &&
-          job.skills.some((skill) => skill.toLowerCase().includes(searchLower)))
-      );
-    });
+    const lower = value.toLowerCase();
 
-    setSuggestions(filtered.slice(0, 6)); // Show max 6 suggestions
+    // Aggregate unique values
+    const categories = [...new Set(jobs.map(j => j.jobcategory).filter(Boolean))];
+    const companies = [...new Set(jobs.map(j => j.company).filter(Boolean))];
+    const skills = [...new Set(jobs.flatMap(j => j.skills || []).filter(Boolean))];
+
+    const matches = [
+      ...categories.filter(c => c.toLowerCase().includes(lower)).map(c => ({ type: 'Category', value: c })),
+      ...skills.filter(s => s.toLowerCase().includes(lower)).map(s => ({ type: 'Skill', value: s })),
+      ...companies.filter(c => c.toLowerCase().includes(lower)).map(c => ({ type: 'Company', value: c }))
+    ];
+
+    setSuggestions(matches.slice(0, 8));
   };
 
-  const handleSuggestionClick = (job) => {
-    setSearchInput(job.title);
+  const handleSuggestionClick = (item) => {
+    if (!selectedTags.some(tag => tag.value === item.value)) {
+      setSelectedTags([...selectedTags, item]);
+    }
+    setSearchInput('');
     setSuggestions([]);
-    setSelectedJob(job);
-    setOpen(true);
   };
 
-  useEffect(() => {
-    const storedUser = sessionStorage.getItem("user");
+  const removeTag = (index) => {
+    setSelectedTags(selectedTags.filter((_, i) => i !== index));
+  };
 
-    if (!storedUser || storedUser === "undefined") return;
+  const handleFindJobs = () => {
+    const params = new URLSearchParams();
 
-    const parsedUser = JSON.parse(storedUser);
+    const categories = selectedTags.filter(t => t.type === 'Category').map(t => t.value);
+    const others = selectedTags.filter(t => t.type !== 'Category').map(t => t.value);
 
-  }, [session]);
+    // If there's text in the input but not added as a tag, treat it as a search query
+    if (searchInput.trim()) {
+      others.push(searchInput.trim());
+    }
+
+    if (categories.length > 0) {
+      params.set('category', categories[0]); // Taking the first one for now
+    }
+
+    if (others.length > 0) {
+      params.set('search', others.join(' '));
+    }
+
+    router.push(`/filter?${params.toString()}`);
+  };
+
+  // --- END SEARCH LOGIC ---
 
   const handleApply = async () => {
 
@@ -302,29 +295,45 @@ const getTimeSincePosting = (createdAt) => {
 
           {/* Search Bar */}
           <div className="
-    relative bg-[#E2F4FA] border border-[#272727] 
-    rounded-full h-[54px] flex items-center
-    pl-6 pr-[110px]
-  ">
+            relative bg-[#E2F4FA] border border-[#272727] 
+            rounded-full min-h-[54px] flex items-center flex-wrap
+            pl-4 pr-[110px] py-2 gap-2
+          ">
+            {selectedTags.map((tag, index) => (
+              <span key={index} className="bg-black text-white text-sm px-3 py-1 rounded-full flex items-center gap-2">
+                {tag.value}
+                <button onClick={() => removeTag(index)} className="hover:text-gray-300">×</button>
+              </span>
+            ))}
+
             <input
               type="text"
-              placeholder="Search by job title, skills, or company"
+              placeholder={selectedTags.length === 0 ? "Search by job title, skills, or company" : ""}
               value={searchInput}
               onChange={(e) => handleSearchInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Backspace' && searchInput === '' && selectedTags.length > 0) {
+                  removeTag(selectedTags.length - 1);
+                }
+                if (e.key === 'Enter') {
+                  handleFindJobs();
+                }
+              }}
               className="
-        w-full bg-transparent outline-none 
-        text-black placeholder:text-gray-500 
-        text-sm sm:text-base
-      "
+                flex-1 bg-transparent outline-none 
+                text-black placeholder:text-gray-500 
+                text-sm sm:text-base min-w-[100px]
+              "
             />
 
             <button
+              onClick={handleFindJobs}
               className="
-        absolute right-2 top-1/2 -translate-y-1/2
-        bg-black text-white px-4 sm:px-6 
-        h-[40px] sm:h-[44px]
-        text-sm sm:text-[18px] rounded-full
-      "
+                absolute right-2 top-1/2 -translate-y-1/2
+                bg-black text-white px-4 sm:px-6 
+                h-[40px] sm:h-[44px]
+                text-sm sm:text-[18px] rounded-full
+              "
             >
               Find your job
             </button>
@@ -335,17 +344,15 @@ const getTimeSincePosting = (createdAt) => {
             <div className="absolute top-full left-0 right-0 
                     bg-white border border-[#272727] 
                     rounded-lg shadow-lg mt-2 
-                    z-[9999]">
-              {suggestions.map((job) => (
+                    z-[9999] max-h-[300px] overflow-y-auto">
+              {suggestions.map((item, index) => (
                 <div
-                  key={job._id}
-                  onClick={() => handleSuggestionClick(job)}
-                  className="p-3 hover:bg-[#E2F4FA] cursor-pointer border-b last:border-b-0"
+                  key={index}
+                  onClick={() => handleSuggestionClick(item)}
+                  className="p-3 hover:bg-[#E2F4FA] cursor-pointer border-b last:border-b-0 flex justify-between items-center"
                 >
-                  <p className="font-semibold text-black">{job.title}</p>
-                  <p className="text-sm text-gray-600">
-                    {job.company} · {job.location}
-                  </p>
+                  <span className="font-semibold text-black">{item.value}</span>
+                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded uppercase">{item.type}</span>
                 </div>
               ))}
             </div>
@@ -395,11 +402,11 @@ const getTimeSincePosting = (createdAt) => {
                     <p className="text-gray-600 text-[12px] leading-[26px]">
                       <span className="font-bold"> {job.company} </span>
                       {[
-          job.location,
-          job.salary,
-          job.type,
-          job.category,
-        ].filter(Boolean).join(", ")}
+                        job.location,
+                        job.salary,
+                        job.type,
+                        job.category,
+                      ].filter(Boolean).join(", ")}
                       {/* {job.location}, {job.salary}, {job.type}, {job.category} */}
                     </p>
                   </div>
@@ -561,11 +568,11 @@ const getTimeSincePosting = (createdAt) => {
           {/* <img
             src="/images/oracle.jpg" className="w-[87px]"
             alt="Job" /> */}
-            <img
-              src={getLogoForJob(selectedJob?.userid)}
-              alt={selectedJob?.company || "Employer Logo"}
-              className="w-[60px] h-[60px] object-cover rounded-md"
-            />
+          <img
+            src={getLogoForJob(selectedJob?.userid)}
+            alt={selectedJob?.company || "Employer Logo"}
+            className="w-[60px] h-[60px] object-cover rounded-md"
+          />
           <div className="md:ml-4 mt-[10px]">
             <h4 className="font-semibold text-[18px] leading-[26px] font-['Poppins']">
               {selectedJob?.title}
@@ -575,14 +582,14 @@ const getTimeSincePosting = (createdAt) => {
             </p>
             <div className="flex flex-wrap gap-[16px] mt-1">
               {selectedJob?.jobtype && (
-              <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
-                {selectedJob?.jobtype}
-              </span>
+                <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
+                  {selectedJob?.jobtype}
+                </span>
               )}
               {selectedJob?.salary && (
-              <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
-                {selectedJob?.salary}
-              </span>
+                <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
+                  {selectedJob?.salary}
+                </span>
               )}
               <span className="bg-[#E2F4FA] text-[12px] leading-[22px] text-black rounded-full px-[16px] py-[8px]">
                 {getTimeSincePosting(selectedJob?.createdAt)}

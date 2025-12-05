@@ -6,6 +6,8 @@ import Modal from "../components/Modal/page";
 
 import { useSearchParams } from 'next/navigation';
 
+import DualRangeSlider from "../components/DualRangeSlider";
+
 function FilterPageContent() {
     const [jobs, setJobs] = useState([]);
     const [filteredJobs, setFilteredJobs] = useState([]);
@@ -17,7 +19,7 @@ function FilterPageContent() {
     const [selectedJobTypes, setSelectedJobTypes] = useState([]);
     const [selectedExperience, setSelectedExperience] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [salaryRange, setSalaryRange] = useState(100000); // Default max
+    const [salaryRange, setSalaryRange] = useState({ min: 0, max: 200000 });
 
     const [open, setOpen] = useState(false);
     const [selectedJob, setSelectedJob] = useState(null);
@@ -50,12 +52,42 @@ function FilterPageContent() {
             .catch(err => console.error("Failed to fetch experiences", err));
     }, []);
 
+    const searchParam = searchParams.get('search');
+
     // Handle URL Query Param for Category
     useEffect(() => {
         if (categoryParam) {
             setSelectedCategories([categoryParam]);
         }
     }, [categoryParam]);
+
+    // Handle URL Query Param for Search
+    useEffect(() => {
+        if (searchParam) {
+            setSearchQuery(searchParam);
+        }
+    }, [searchParam]);
+
+    const parseSalary = (salaryStr) => {
+        if (!salaryStr) return null;
+        // Remove commas, spaces
+        const clean = salaryStr.replace(/,/g, '').toUpperCase();
+        const parts = clean.split('-').map(p => p.trim());
+
+        const parseVal = (val) => {
+            let num = parseFloat(val);
+            if (val.includes('K')) num *= 1000;
+            if (val.includes('LPA')) num *= 100000;
+            return num;
+        }
+
+        if (parts.length === 2) {
+            return { min: parseVal(parts[0]), max: parseVal(parts[1]) };
+        }
+        // If single value, treat as min? or exact? Let's assume exact.
+        const val = parseVal(parts[0]);
+        return { min: val, max: val };
+    };
 
     // Filter Logic
     useEffect(() => {
@@ -86,8 +118,19 @@ function FilterPageContent() {
             result = result.filter(job => selectedExperience.includes(job.experience));
         }
 
+        // Salary Filter
+        result = result.filter(job => {
+            if (!job.salary) return true; // Include jobs with no salary specified? Or exclude? Let's include.
+            const jobSalary = parseSalary(job.salary);
+            if (!jobSalary || isNaN(jobSalary.min)) return true;
+
+            // Overlap logic: max(jobMin, filterMin) <= min(jobMax, filterMax)
+            const overlap = Math.max(jobSalary.min, salaryRange.min) <= Math.min(jobSalary.max, salaryRange.max);
+            return overlap;
+        });
+
         setFilteredJobs(result);
-    }, [jobs, searchQuery, selectedCategories, selectedJobTypes, selectedExperience]);
+    }, [jobs, searchQuery, selectedCategories, selectedJobTypes, selectedExperience, salaryRange]);
 
     const handleCategoryChange = (category) => {
         setSelectedCategories(prev =>
@@ -113,17 +156,10 @@ function FilterPageContent() {
             return;
         }
 
-        // Assuming loggedUser logic is handled similarly to home page or via session
-        // For now using session.user.id if available or we need to fetch user details like in home page
-        // Let's reuse the logic from Home page if possible, but for now basic apply
-
         setApplying(true);
         setApplicationMessage('');
 
         try {
-            // We need the user ID from our DB, not just next-auth session if they are different
-            // But assuming session has it or we can get it. 
-            // In page.js it uses sessionStorage 'user'. Let's try to use that too for consistency.
             const storedUser = sessionStorage.getItem("user");
             let userId = session?.user?.id;
             if (storedUser && storedUser !== "undefined") {
@@ -168,7 +204,7 @@ function FilterPageContent() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-[100px] pb-10 px-4 md:px-10">
+        <div className="min-h-screen pt-[100px] pb-10 px-4 md:px-10">
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
 
                 {/* Sidebar Filters */}
@@ -248,6 +284,7 @@ function FilterPageContent() {
                                         setSelectedJobTypes([]);
                                         setSelectedExperience([]);
                                         setSearchQuery("");
+                                        setSalaryRange({ min: 0, max: 200000 });
                                     }}
                                     className="mt-4 text-blue-600 font-medium hover:underline"
                                 >
@@ -266,6 +303,7 @@ function FilterPageContent() {
                                 setSelectedJobTypes([]);
                                 setSelectedExperience([]);
                                 setSearchQuery("");
+                                setSalaryRange({ min: 0, max: 200000 });
                             }}
                             className="text-sm text-gray-500 hover:text-black"
                         >
@@ -341,22 +379,18 @@ function FilterPageContent() {
                         </div>
                     </div>
 
-                    {/* Salary Range (Visual only for now as data might vary) */}
+                    {/* Salary Range */}
                     <div className="mb-6">
                         <h3 className="font-semibold mb-3">Salary Range</h3>
-                        <input
-                            type="range"
-                            min="0"
-                            max="200000"
-                            step="1000"
-                            value={salaryRange}
-                            onChange={(e) => setSalaryRange(Number(e.target.value))}
-                            className="w-full accent-black"
+                        <DualRangeSlider
+                            min={0}
+                            max={200000}
+                            onChange={({ min, max }) => setSalaryRange({ min, max })}
                         />
-                        <div className="flex justify-between text-xs text-gray-500 mt-1">
-                            <span>$0</span>
-                            <span>${salaryRange.toLocaleString()}+</span>
-                        </div>
+                        {/* <div className="flex justify-between text-xs text-gray-500 mt-1">
+                            <span>{salaryRange.min.toLocaleString()}</span>
+                            <span>{salaryRange.max.toLocaleString()}</span>
+                        </div> */}
                     </div>
 
                 </aside>
@@ -450,3 +484,5 @@ export default function FilterPage() {
         </Suspense>
     );
 }
+
+
