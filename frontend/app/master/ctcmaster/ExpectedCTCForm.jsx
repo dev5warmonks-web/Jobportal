@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function ExpectedCTCForm({ editItem, setEditItem, reload }) {
   const [form, setForm] = useState({
@@ -42,8 +43,8 @@ export default function ExpectedCTCForm({ editItem, setEditItem, reload }) {
     e.preventDefault();
     const method = editItem ? 'PUT' : 'POST';
     const url = editItem
-      ? `https://api.mindssparsh.com/api/expected-ctc/${editItem._id}`
-      : `https://api.mindssparsh.com/api/expected-ctc`;
+      ? `${BASE_URL}/api/expected-ctc/${editItem._id}`
+      : `${BASE_URL}/api/expected-ctc`;
 
     const payload = {
       ...form,

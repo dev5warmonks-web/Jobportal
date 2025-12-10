@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { BASE_URL } from "../../../config/apiConfig";
 
 export const authOptions = {
   providers: [
@@ -7,7 +8,7 @@ export const authOptions = {
       name: "Credentials",
       async authorize(credentials) {
         try {
-          const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'https://api.mindssparsh.com'}/api/users/login`;
+          const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || `${BASE_URL}`}/api/users/login`;
           console.log('🔐 Attempting login to:', apiUrl);
           console.log('📧 Credentials:', { emailOrPhone: credentials.emailOrPhone });
 

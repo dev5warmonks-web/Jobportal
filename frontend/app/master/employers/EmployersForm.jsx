@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function EmployersForm({ editItem, setEditItem, reload }) {
   const [formData, setFormData] = useState({
@@ -56,8 +57,8 @@ export default function EmployersForm({ editItem, setEditItem, reload }) {
     try {
       const method = editItem ? "PUT" : "POST";
       const url = editItem
-        ? `https://api.mindssparsh.com/api/users/${editItem._id}`
-        : `https://api.mindssparsh.com/api/users`;
+        ? `${BASE_URL}/api/users/${editItem._id}`
+        : `${BASE_URL}/api/users`;
 
       const data = new FormData();
       console.log(formData);

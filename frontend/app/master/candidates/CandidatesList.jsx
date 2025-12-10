@@ -1,10 +1,11 @@
 "use client";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function CandidatesList({ candidates, setEditItem, reload }) {
   const handleDelete = async (id) => {
     if (!confirm("Are you sure?")) return;
     try {
-      const res = await fetch(`https://api.mindssparsh.com/api/candidates/${id}`, {
+      const res = await fetch(`${BASE_URL}/api/candidates/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Failed to delete");

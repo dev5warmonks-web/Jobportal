@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BASE_URL } from "../config/apiConfig";
 
 export default function ApplicationsForm({ editItem, setEditItem, reload }) {
   const [formData, setFormData] = useState(editItem || { status: "", notes: "" });
@@ -15,8 +16,8 @@ export default function ApplicationsForm({ editItem, setEditItem, reload }) {
     try {
       const method = editItem ? "PUT" : "POST";
       const url = editItem
-        ? `https://api.mindssparsh.com/api/applications/${editItem._id}`
-        : `https://api.mindssparsh.com/api/applications`;
+        ? `${BASE_URL}/api/applications/${editItem._id}`
+        : `${BASE_URL}/api/applications`;
 
       const res = await fetch(url, {
         method,

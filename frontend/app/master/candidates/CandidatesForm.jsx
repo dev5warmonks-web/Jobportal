@@ -2,6 +2,7 @@
 
 // import { useState } from "react";
 import { useState, useEffect } from "react";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function CandidatesForm({ editItem, setEditItem, reload }) {
   const [formData, setFormData] = useState(editItem || { name: "", email: "", skills: "" });
@@ -34,8 +35,8 @@ export default function CandidatesForm({ editItem, setEditItem, reload }) {
     try {
       const method = editItem ? "PUT" : "POST";
       const url = editItem
-        ? `https://api.mindssparsh.com/api/candidates/${editItem._id}`
-        : `https://api.mindssparsh.com/api/candidates`;
+        ? `${BASE_URL}/api/candidates/${editItem._id}`
+        : `${BASE_URL}/api/candidates`;
 
       const res = await fetch(url, {
         method,

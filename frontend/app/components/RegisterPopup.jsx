@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { sendOtp, verifyOtp } from '../api/api';
+import { BASE_URL } from "../config/apiConfig";
 
 export default function RegisterPopup({ onClose, onLogin }) {
   const [name, setName] = useState('');
@@ -40,7 +41,7 @@ export default function RegisterPopup({ onClose, onLogin }) {
     try {
 
       const checkRes = await fetch(
-        `https://api.mindssparsh.com/api/users/check-unique?email=${email}&mobile=${mobile}`
+        `${BASE_URL}/api/users/check-unique?email=${email}&mobile=${mobile}`
       );
       
       const { exists } = await checkRes.json();

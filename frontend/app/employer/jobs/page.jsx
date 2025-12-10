@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 // import { getJobs } from "../../api";
 import { getJobsByUser } from "@/app/api/api";
-const API_URL = "https://api.mindssparsh.com/api/jobs";
+import { BASE_URL } from "../../config/apiConfig";
+const API_URL = `${BASE_URL}/api/jobs`;
 
 
 export default function BasicDetails() {

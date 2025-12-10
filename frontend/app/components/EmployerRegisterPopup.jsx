@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { sendOtp, verifyOtp } from '../api/api';
+import { BASE_URL } from "../config/apiConfig";
 
 export default function EmployerRegisterPopup({ onClose, onLogin }) {
   const [companyName, setCompanyName] = useState('');
@@ -87,7 +88,7 @@ export default function EmployerRegisterPopup({ onClose, onLogin }) {
 //         }
 
         const checkRes = await fetch(
-          `https://api.mindssparsh.com/api/users/check-unique?email=${email}&mobile=${phone}`
+          `${BASE_URL}/api/users/check-unique?email=${email}&mobile=${phone}`
         );
         const { exists } = await checkRes.json();
         if (exists) {

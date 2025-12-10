@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { addJob } from "../../../api";
+import { BASE_URL } from "../../../config/apiConfig";
 
 
 export default function BasicDetails() {
@@ -63,7 +64,7 @@ export default function BasicDetails() {
 
   // Fetch salary options
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/expected-ctc")
+    fetch(`${BASE_URL}/api/expected-ctc`)
       .then(res => res.json())
       .then(data => {
         setSalaryOptions(data);
@@ -82,7 +83,7 @@ export default function BasicDetails() {
 
   // Fetch experience options
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/job-experiences")
+    fetch(`${BASE_URL}/api/job-experiences`)
       .then(res => res.json())
       .then(data => {
         setExperienceOptions(data);
@@ -92,7 +93,7 @@ export default function BasicDetails() {
 
   // Fetch location options
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/job-locations")
+    fetch(`${BASE_URL}/api/job-locations`)
       .then(res => res.json())
       .then(data => {
         setLocationOptions(data);
@@ -102,7 +103,7 @@ export default function BasicDetails() {
 
   // Fetch job category options
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/job-categories")
+    fetch(`${BASE_URL}/api/job-categories`)
       .then(res => res.json())
       .then(data => {
         setjobCategoryOptions(data);
@@ -112,7 +113,7 @@ export default function BasicDetails() {
 
   // Fetch key skills options
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/skills")
+    fetch(`${BASE_URL}/api/skills`)
       .then(res => res.json())
       .then(data => {
         setSkillsOptions(data);

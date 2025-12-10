@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { BASE_URL } from "../../../config/apiConfig";
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch('https://api.mindssparsh.com/api/users')
+    fetch(`${BASE_URL}/api/users`)
       .then(res => res.json())
       .then(data => setUsers(data));
   }, []);

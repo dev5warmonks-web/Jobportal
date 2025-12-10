@@ -10,7 +10,7 @@ export default function EmployersList({ employers, setEditItem, reload }) {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this employer?")) {
       try {
-        const response = await fetch(`https://api.mindssparsh.com/api/users/${id}`, { method: "DELETE" });
+        const response = await fetch(`${BASE_URL}/api/users/${id}`, { method: "DELETE" });
         if (response.ok) {
           reload(); // reload parent list
         } else {
@@ -29,7 +29,7 @@ export default function EmployersList({ employers, setEditItem, reload }) {
       const formData = new FormData();
       formData.append("isFeatured", updatedStatus);
 
-      const response = await fetch(`https://api.mindssparsh.com/api/users/${employer._id}`, {
+      const response = await fetch(`${BASE_URL}/api/users/${employer._id}`, {
         method: "PUT",
         body: formData,
       });

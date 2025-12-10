@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function JobLocationForm({ editItem, setEditItem, reload }) {
   const [form, setForm] = useState({
@@ -35,8 +36,8 @@ export default function JobLocationForm({ editItem, setEditItem, reload }) {
     e.preventDefault();
     const method = editItem ? "PUT" : "POST";
     const url = editItem
-      ? `https://api.mindssparsh.com/api/job-locations/${editItem._id}`
-      : `https://api.mindssparsh.com/api/job-locations`;
+      ? `${BASE_URL}/api/job-locations/${editItem._id}`
+      : `${BASE_URL}/api/job-locations`;
 
     try {
       const res = await fetch(url, {

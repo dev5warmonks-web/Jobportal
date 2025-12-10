@@ -1,10 +1,11 @@
 "use client";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function EducationList({ education, setEditItem, reload }) {
   const handleDelete = async (id) => {
     if (!confirm("Are you sure?")) return;
 
-    const res = await fetch(`https://api.mindssparsh.com/api/education/${id}`, {
+    const res = await fetch(`${BASE_URL}/api/education/${id}`, {
       method: "DELETE",
     });
 

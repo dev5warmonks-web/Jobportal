@@ -1,10 +1,11 @@
 'use client';
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function JobExperienceList({ experience, setEditItem, reload }) {
   const handleDelete = async (id) => {
     if (!confirm("Are you sure?")) return;
 
-    const res = await fetch(`https://api.mindssparsh.com/api/job-experiences/${id}`, {
+    const res = await fetch(`${BASE_URL}/api/job-experiences/${id}`, {
       method: "DELETE",
     });
 

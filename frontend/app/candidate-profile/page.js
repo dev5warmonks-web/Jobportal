@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
+import { BASE_URL } from "../config/apiConfig";
 
 export default function CandidateProfilePage() {
   const { data: session } = useSession();
@@ -9,7 +10,7 @@ export default function CandidateProfilePage() {
 
   useEffect(() => {
     if (session) {
-      fetch(`https://api.mindssparsh.com/api/users/${session.user.id}`)
+      fetch(`${BASE_URL}/api/users/${session.user.id}`)
         .then(res => res.json())
         .then(data => setUser(data));
     }
