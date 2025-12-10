@@ -1,7 +1,9 @@
-const API_URL = "https://api.mindssparsh.com/api/jobs";
-const API_USERS_URL = "https://api.mindssparsh.com/api/users";      // for users
-const API_AUTH_URL = "https://api.mindssparsh.com/api/auth";        // unused currently
-const API_USERROLE_URL = "https://api.mindssparsh.com/api/user-roles";
+import { BASE_URL } from "../config/apiConfig";
+const API_URL = `${BASE_URL}/api/jobs`;
+const API_USERS_URL = `${BASE_URL}/api/users`;      // for users
+const API_AUTH_URL = `${BASE_URL}/api/auth`;        // unused currently
+// const API_USERROLE_URL = "https://api.mindssparsh.com/api/user-roles";
+const API_USERROLE_URL = `${BASE_URL}/api/user-roles`;
 
 // ========================================
 // JOBS API
@@ -140,4 +142,16 @@ export const getUserRole = async () => {
   if (!res.ok) throw new Error("Failed to fetch user roles");
   return res.json(); // returns array of roles
 };
+
+export async function sendLoginOtp(payload) {
+  console.log("Login OTP Payload:", payload);
+
+  const res = await fetch("http://localhost:3002/api/auth/login-send-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  return res.json();
+}
 

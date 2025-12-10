@@ -3,6 +3,7 @@
 import CandidatesForm from "./CandidatesForm";
 import CandidatesList from "./CandidatesList";
 import { useState, useEffect } from "react";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function CandidatesPage() {
   const [candidates, setCandidates] = useState([]);
@@ -17,7 +18,7 @@ export default function CandidatesPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`https://api.mindssparsh.com/api/users/role-name/${roleName}`);
+      const res = await fetch(`${BASE_URL}/api/users/role-name/${roleName}`);
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error || "Failed to load candidates");

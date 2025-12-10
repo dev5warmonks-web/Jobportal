@@ -3,6 +3,7 @@
 import JobCategoryForm from "./JobCategoryForm";
 import JobCategoryList from "./JobCategoryList";
 import { useState, useEffect } from "react";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function JobCategoryPage() {
   const [categories, setCategories] = useState([]);
@@ -15,7 +16,7 @@ export default function JobCategoryPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`https://api.mindssparsh.com/api/job-categories`);
+      const res = await fetch(`${BASE_URL}/api/job-categories`);
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error || "Failed to load categories");

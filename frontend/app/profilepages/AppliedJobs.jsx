@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
+import { BASE_URL } from "../config/apiConfig";
 
 export default function AppliedJobs() {
-  const BACKEND_BASE = "https://api.mindssparsh.com";
+  const BACKEND_BASE = `${BASE_URL}`;
   const [applications, setApplications] = useState([]);
   const [allEmployers, setAllEmployers] = useState([]);
   const [loading, setLoading] = useState(true);

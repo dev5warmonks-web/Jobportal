@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 import ExpectedCTCForm from "./ExpectedCTCForm";
 import ExpectedCTCList from "./ExpectedCTCList";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function ExpectedCTCPage() {
   const [ctcs, setCtcs] = useState([]);
   const [editItem, setEditItem] = useState(null);
 
   const loadCTCs = async () => {
-    const res = await fetch(`https://api.mindssparsh.com/api/expected-ctc`);
+    const res = await fetch(`${BASE_URL}/api/expected-ctc`);
     const data = await res.json();
     setCtcs(data);
   };

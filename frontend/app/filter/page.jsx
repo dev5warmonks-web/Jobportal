@@ -3,6 +3,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useSession } from 'next-auth/react';
 import { getJobs } from "../api";
 import Modal from "../components/Modal/page";
+import { BASE_URL } from "../config/apiConfig";
 
 import { useSearchParams } from 'next/navigation';
 
@@ -30,7 +31,7 @@ function FilterPageContent() {
     const searchParams = useSearchParams();
     const categoryParams = searchParams.getAll('category');
 
-    const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.mindssparsh.com';
+    const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || `${BASE_URL}`;
 
     useEffect(() => {
         // Fetch Jobs

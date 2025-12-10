@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-const API_URL = "https://api.mindssparsh.com/api/applications";
+import { BASE_URL } from "../../config/apiConfig";
+const API_URL = `${BASE_URL}/api/applications`;
 
 export default function ApplicationsPage() {
   const [applications, setApplications] = useState([]);

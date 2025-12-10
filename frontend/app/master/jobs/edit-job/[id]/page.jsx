@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { getJob, updateJob } from "../../../../api";
+import { BASE_URL } from "../../../../config/apiConfig";
 
 export default function EditJob() {
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function EditJob() {
   const [salaryOptions, setSalaryOptions] = useState([]);
 
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/expected-ctc")
+    fetch(`${BASE_URL}/api/expected-ctc`)
       .then(res => res.json())
       .then(data => setSalaryOptions(data))
       .catch(err => console.error("Error loading salary options", err));
@@ -47,7 +48,7 @@ export default function EditJob() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`https://api.mindssparsh.com/api/job-categories`);
+      const res = await fetch(`${BASE_URL}/api/job-categories`);
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error || "Failed to load categories");
@@ -95,14 +96,14 @@ export default function EditJob() {
   }, [id]);
 
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/job-experiences")
+    fetch(`${BASE_URL}/api/job-experiences`)
       .then(res => res.json())
       .then(data => setExperienceOptions(data))
       .catch(err => console.error("Error loading experiences", err));
   }, []);
 
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/job-locations")
+    fetch(`${BASE_URL}/api/job-locations`)
       .then(res => res.json())
       .then(data => setLocations(data))
       .catch(err => console.error("Error loading location", err));

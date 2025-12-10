@@ -9,6 +9,7 @@ import RegisterPopup from "./components/RegisterPopup";
 import EmployerRegisterPopup from "./components/EmployerRegisterPopup";
 import OtpPopup from "./components/OtpPopup";
 import TagsSlider from "./components/TagsSlider";
+import { BASE_URL } from "./config/apiConfig";
 
 
 export default function Home() {
@@ -34,7 +35,7 @@ export default function Home() {
   const [applicationMessage, setApplicationMessage] = useState('');
   const [featuredEmployers, setFeaturedEmployers] = useState([]);
 
-  const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.mindssparsh.com';
+  const BACKEND_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || `${BASE_URL}`;
 
   // const [showLogin, setShowLogin] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
@@ -73,7 +74,7 @@ export default function Home() {
   const getLogoForJob = (userId) => {
     const user = allEmployers.find(u => u._id === userId);
     if (user?.logo) {
-      return `${BACKEND_BASE}/uploads/${user.logo}`;
+      return `${BASE_URL}/uploads/${user.logo}`;
     }
     return "/images/oracle.jpg"; // fallback logo
   };
@@ -481,7 +482,7 @@ export default function Home() {
           {featuredEmployers.map((employer) => (
             <div key={employer._id} className="bg-[#E2F4FA] md:p-2">
               <img
-                src={`${BACKEND_BASE}/uploads/${employer.logo}`}
+                src={`${BASE_URL}/uploads/${employer.logo}`}
                 alt={employer.companyName || 'Company Logo'}
                 className="w-[160px] h-[80px] object-contain"
               />

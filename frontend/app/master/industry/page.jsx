@@ -3,6 +3,7 @@
 import IndustryForm from "./IndustryForm";
 import IndustryList from "./IndustryList";
 import { useState, useEffect } from "react";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function IndustryPage() {
   const [industry, setindustry] = useState([]);
@@ -15,7 +16,7 @@ export default function IndustryPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`https://api.mindssparsh.com/api/industry`);
+      const res = await fetch(`${BASE_URL}/api/industry`);
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error || "Failed to load");

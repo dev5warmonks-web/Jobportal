@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { loginUser } from '../api/api';
 import { getUserRole } from "../api/api";
+import { BASE_URL } from "../config/apiConfig";
 
 export default function LoginPopup({ onClose, onRegister, login }) {
   const [email, setEmail] = useState('');
@@ -69,7 +70,7 @@ export default function LoginPopup({ onClose, onRegister, login }) {
         return;
       }
 
-      const res = await fetch("https://api.mindssparsh.com/api/auth/login", {
+      const res = await fetch(`${BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { addJob } from "../../../api";
+import { BASE_URL } from "../../../config/apiConfig";
 
 
 export default function BasicDetails() {
@@ -74,7 +75,7 @@ export default function BasicDetails() {
   const [salaryOptions, setSalaryOptions] = useState([]);
 
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/expected-ctc")
+    fetch(`${BASE_URL}/api/expected-ctc`)
       .then(res => res.json())
       .then(data => setSalaryOptions(data))
       .catch(err => console.error("Error loading salary options", err));

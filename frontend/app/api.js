@@ -1,4 +1,5 @@
-const API_URL = "https://api.mindssparsh.com/api/jobs";
+import { BASE_URL } from "./config/apiConfig";
+const API_URL = `${BASE_URL}/api/jobs`;
 
 export const getJobs = async () => await fetch(API_URL).then(res => res.json());
 export const getJob = async (id) => await fetch(`${API_URL}/${id}`).then(res => res.json());

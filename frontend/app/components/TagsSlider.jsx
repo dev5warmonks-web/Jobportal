@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
+import { BASE_URL } from "../config/apiConfig";
 
 
 import Link from "next/link";
@@ -16,7 +17,7 @@ export default function TagsSlider() {
         setLoading(true);
         setError("");
         try {
-            const res = await fetch(`https://api.mindssparsh.com/api/job-categories`);
+            const res = await fetch(`${BASE_URL}/api/job-categories`);
             if (!res.ok) {
                 const errData = await res.json();
                 throw new Error(errData.error || "Failed to load categories");

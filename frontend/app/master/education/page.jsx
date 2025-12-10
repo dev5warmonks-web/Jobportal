@@ -3,6 +3,7 @@
 import EducationForm from "./EducationForm";
 import EducationList from "./EducationList";
 import { useState, useEffect } from "react";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function EducationPage() {
   const [education, seteducation] = useState([]);
@@ -15,7 +16,7 @@ export default function EducationPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`https://api.mindssparsh.com/api/education`);
+      const res = await fetch(`${BASE_URL}/api/education`);
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error || "Failed to load");

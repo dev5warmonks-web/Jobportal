@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { BASE_URL } from "../config/apiConfig";
 
 export default function ProfessionalDetails() {
   const [userId, setUserId] = useState(null); // store logged in user id
@@ -26,7 +27,7 @@ export default function ProfessionalDetails() {
 
   // Fetch experience options
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/job-experiences")
+    fetch(`${BASE_URL}/api/job-experiences`)
       .then((res) => res.json())
       .then((data) => setExperienceOptions(data))
       .catch((err) => console.error("Failed to fetch experience:", err));
@@ -34,7 +35,7 @@ export default function ProfessionalDetails() {
 
   // Fetch education options
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/education")
+    fetch(`${BASE_URL}/api/education`)
       .then((res) => res.json())
       .then((data) => setEducationOptions(data))
       .catch((err) => console.error("Failed to fetch education details:", err));
@@ -42,7 +43,7 @@ export default function ProfessionalDetails() {
 
   // Fetch industry options
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/industry")
+    fetch(`${BASE_URL}/api/industry`)
       .then((res) => res.json())
       .then((data) => setIndustryOptions(data))
       .catch((err) => console.error("Failed to fetch industry:", err));
@@ -50,7 +51,7 @@ export default function ProfessionalDetails() {
 
   // Fetch key skills options
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/skills")
+    fetch(`${BASE_URL}/api/skills`)
       .then(res => res.json())
       .then(data => {
         setSkillsOptions(data);
@@ -69,7 +70,7 @@ export default function ProfessionalDetails() {
     const fetchProfessionalData = async () => {
       try {
         const response = await fetch(
-          `https://api.mindssparsh.com/api/professional/user/${parsedUser._id}`
+          `${BASE_URL}/api/professional/user/${parsedUser._id}`
         );
 
         if (response.ok) {
@@ -158,7 +159,7 @@ export default function ProfessionalDetails() {
 
       if (userId) {
         res = await fetch(
-          `https://api.mindssparsh.com/api/professional/${userId}`,
+          `${BASE_URL}/api/professional/${userId}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -166,7 +167,7 @@ export default function ProfessionalDetails() {
           }
         );
       } else {
-        res = await fetch("https://api.mindssparsh.com/api/professional", {
+        res = await fetch(`${BASE_URL}/api/professional`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),

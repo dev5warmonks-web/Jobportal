@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { getJob, updateJob } from "../../../../api";
+import { BASE_URL } from "../../../../config/apiConfig";
 
 export default function EditJob() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function EditJob() {
   const [salaryOptions, setSalaryOptions] = useState([]);
 
   useEffect(() => {
-    fetch("https://api.mindssparsh.com/api/expected-ctc")
+    fetch(`${BASE_URL}/api/expected-ctc`)
       .then(res => res.json())
       .then(data => setSalaryOptions(data))
       .catch(err => console.error("Error loading salary options", err));

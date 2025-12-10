@@ -3,6 +3,7 @@
 import SkillsForm from "./SkillsForm";
 import SkillsList from "./SkillsList";
 import { useState, useEffect } from "react";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function IndustryPage() {
   const [skills, setskills] = useState([]);
@@ -15,7 +16,7 @@ export default function IndustryPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`https://api.mindssparsh.com/api/skills`);
+      const res = await fetch(`${BASE_URL}/api/skills`);
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.error || "Failed to load");

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BASE_URL } from "../../config/apiConfig";
 
 export default function EmployersList({ employers, setEditItem, reload }) {
   const [loading, setLoading] = useState(false);
@@ -87,7 +88,7 @@ export default function EmployersList({ employers, setEditItem, reload }) {
                   <td className="py-3 px-4">
                     {employer.logo ? (
                       <img
-                        src={`https://api.mindssparsh.com/uploads/${employer.logo}`}
+                        src={`${BASE_URL}/uploads/${employer.logo}`}
                         alt="Logo"
                         className="w-10 h-10 object-cover rounded-full"
                       />

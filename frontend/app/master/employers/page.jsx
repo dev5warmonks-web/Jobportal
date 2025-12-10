@@ -2,6 +2,7 @@
 
 import EmployersForm from "./EmployersForm";
 import EmployersList from "./EmployersList";
+import { BASE_URL } from "../../config/apiConfig";
 import { useState, useEffect } from "react";
 
 export default function EmployersPage() {
@@ -19,7 +20,7 @@ export default function EmployersPage() {
     try {
       console.log("Loading users with role:", roleName);
       const res = await fetch(
-        `https://api.mindssparsh.com/api/users/role-name/${roleName}`
+        `${BASE_URL}/api/users/role-name/${roleName}`
       );
       if (!res.ok) {
         const errData = await res.json();
