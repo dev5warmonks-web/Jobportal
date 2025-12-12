@@ -1,3 +1,5 @@
+//login with otp
+
 'use client';
 
 import { signIn } from 'next-auth/react';
@@ -5,117 +7,88 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { loginUser } from '../api/api';
 import { getUserRole } from "../api/api";
-import { BASE_URL } from "../config/apiConfig";
+import { sendLoginOtp } from '../api/api';
 
 export default function LoginPopup({ onClose, onRegister, login }) {
   const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState('');
   const [emailOrPhone, setEmailOrPhone] = useState('');
 
   const [error, setError] = useState('');
+  const [otp, setOtp] = useState('');
+  const [step, setStep] = useState('login'); // login → otp
+  const [emailForOtp, setEmailForOtp] = useState(null);
   const [showUserType, setShowUserType] = useState(false);
+  const [userType, setUserType] = useState("");
   // const { login } = useSession();
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setError("");
+  const handleSendOtp = async (e) => {
+    e.preventDefault();
+    setError("");
 
-  //   try {
-  //     const res = await fetch("https://api.mindssparsh.com/api/auth/login", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         email: emailOrPhone,
-  //         mobile: "9876543210",
-  //       }),
-  //     });
+    const isEmail = emailOrPhone.includes("@");
+    const isPhone = /^\d{10}$/.test(emailOrPhone);
 
-  //     const data = await res.json();
-  //     // alert(JSON.stringify(data, null, 2));
-  //     if (!res.ok) {
-  //       setError(data.message || "Login failed");
-  //       return;
-  //     }
+    // Input validation
+    if (!isEmail && !isPhone) {
+      setError("Enter a valid email or 10-digit mobile number");
+      return;
+    }
 
-  //     // Store user in localStorage / cookie
-  //     localStorage.setItem("user", JSON.stringify(data));
-  //     sessionStorage.setItem("user", JSON.stringify(data));
+    // Build payload
+    const payload = isEmail
+      ? { email: emailOrPhone }
+      : { mobile: emailOrPhone };
 
-  //     // Redirect
-  //     // window.location.href = "/profilepages";
+    try {
+      const data = await sendLoginOtp(payload);
 
-  //   } catch (err) {
-  //     console.log(err);
-  //     setError("Something went wrong");
-  //   }
-  // };
+      if (!data.success) {
+        setError(data.message || "OTP sending failed");
+        return;
+      }
 
+      setEmailForOtp(data.email);
+      setStep("otp");
+    } catch (err) {
+      console.error("OTP ERROR:", err);
+      setError("Server error while sending OTP");
+    }
+  };
 
-  const handleSubmit = async (e) => {
+  // STEP 2 — VERIFY OTP
+  const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phoneRegex = /^\d{10}$/;
-
-      const isEmail = emailRegex.test(emailOrPhone);
-      const isPhone = phoneRegex.test(emailOrPhone);
-
-      if (!isEmail && !isPhone) {
-        setError("Enter a valid email or 10-digit phone number");
-        return;
-      }
-
-      const res = await fetch(`${BASE_URL}/api/auth/login`, {
+      const res = await fetch("http://localhost:3002/api/auth/login-verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: isEmail ? emailOrPhone : "",
-          mobile: isPhone ? emailOrPhone : "",
-        }),
+        body: JSON.stringify({ email: emailForOtp, otp }),
       });
 
       const data = await res.json();
-      if (!res.ok) {
-        setError(data.message || "Login failed");
+      if (!data.success) {
+        setError(data.message);
         return;
       }
+      const user = data.user;
 
       // Save user
-      localStorage.setItem("user", JSON.stringify(data));
-      sessionStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("user", JSON.stringify(user));
+      sessionStorage.setItem("user", JSON.stringify(user));
 
-      //  Fetch all roles like UserMenu
+      // Fetch roles
       const allRoles = await getUserRole();
+      const matchedRole = allRoles.find(r => r._id === user.user_role);
+      const roleName = matchedRole?.name?.toLowerCase() || "candidate";
 
-      //  Match role ID with user role
-      // const matchedRole = allRoles.find(r => r._id === data.user_role);
-      // const roleName = matchedRole?.name?.toLowerCase() || "candidate";
-      
-      let roleName = "candidate"; 
-      if (data.user_role) {
-        const matchedRole = allRoles.find(r => r._id === data.user_role);
-        roleName = matchedRole?.name?.toLowerCase() || "candidate";
-      } else {
-        console.warn("User role missing in login response, defaulting to 'candidate'");
-      }
+      // SAVE COOKIE FOR MIDDLEWARE
+      document.cookie = `role=${roleName}; path=/; max-age=86400; samesite=lax`;
 
-      console.log("Matched role:", roleName);
-
-      // SET COOKIE FOR MIDDLEWARE 
-    document.cookie = `role=${roleName}; path=/`;
-
-    //secure cookie for HTTPS:
-    //document.cookie = `role=${roleName}; path=/; secure; samesite=lax`;
-
-    //cookie to expire after a day:
-    //document.cookie = `role=${roleName}; path=/; max-age=86400`;
-
-      //  Redirect based on role
+      // Redirect user
       if (roleName === "employer") {
         window.location.href = "/employer/jobs";
       } else if (["admin", "super admin"].includes(roleName)) {
@@ -127,19 +100,121 @@ export default function LoginPopup({ onClose, onRegister, login }) {
       onClose();
 
     } catch (err) {
-      // console.error(err);
-      // setError("Something went wrong");
-      setError("User not found. Please register first.");
+      setError("Invalid OTP. Try again.");
     }
-  };
-
-  const handleRegisterClick = () => {
-    // Show user type selection before opening registration
-    setShowUserType(true);
   };
 
   const handleUserTypeSelect = (type) => {
     onRegister(type); // passes 'candidate' or 'employer' to page.js
+  };
+
+  // --------------------------------------------------------
+  // STEP 1 — CHECK USER TYPE BEFORE LOGIN
+  // --------------------------------------------------------
+  const handleCheckUserType = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    const input = emailOrPhone.trim();
+    const isEmail = input.includes("@");
+    const isPhone = /^\d{10}$/.test(input);
+
+    if (!isEmail && !isPhone) {
+      setError("Enter valid email or phone");
+      return;
+    }
+
+    let res = await fetch("http://localhost:3002/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: input })
+    });
+
+    let data = await res.json();
+    // if (!data.success) {
+    //   setError(data.message);
+    //   return;
+    // }
+
+    const roleId = data.user_role;
+    // Fetch all roles to match ID
+    const roles = await getUserRole();
+    const matchedRole = roles.find(r => r._id === roleId);
+
+    if (!matchedRole) {
+      setError("User role not found");
+      return;
+    }
+
+    const roleName = matchedRole.name.toLowerCase();
+    setUserType(roleName);
+
+    // Admin logic
+    if (roleName === "admin" || roleName === "super admin") {
+      setStep("admin-password");
+      return;
+    }
+
+    // OTP login for: employer / candidate
+    setStep("otp-request");
+  };
+
+  const handleAdminPasswordLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    const input = emailOrPhone.trim();
+    const isEmail = input.includes("@");
+    const isPhone = /^\d{10}$/.test(input);
+
+    if (!isEmail && !isPhone) {
+      setError("Enter valid email or phone");
+      return;
+    }
+	
+	//newly add
+	let res = await fetch("http://localhost:3002/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: input })
+    });
+
+    let data = await res.json();
+    localStorage.setItem("user", JSON.stringify(data));
+    sessionStorage.setItem("user", JSON.stringify(data));
+	  const roleId = data.user_role;
+    // Fetch all roles to match ID
+    const roles = await getUserRole();
+    const matchedRole = roles.find(r => r._id === roleId);
+
+    if (!matchedRole) {
+      setError("User role not found");
+      return;
+    }
+
+    const roleName = matchedRole.name.toLowerCase();
+    setUserType(roleName);
+	//newly add
+
+    let res1 = await fetch("http://localhost:3002/api/auth/admin-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: emailOrPhone,
+        password,
+		    roleName
+      })
+    });
+
+    let data1 = await res1.json();
+document.cookie = `role=${roleName}; path=/; max-age=86400; samesite=lax`;
+    // if (!data1.success) {
+    //   setError(data1.message);
+    //   return;
+    // }
+
+    // Redirect admin
+    window.location.href = "/master/jobs";
   };
 
 
@@ -159,7 +234,7 @@ export default function LoginPopup({ onClose, onRegister, login }) {
           Access your dashboard and manage everything in one place. Enter your credentials to continue.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
               type="text"
@@ -170,16 +245,6 @@ export default function LoginPopup({ onClose, onRegister, login }) {
               required
             />
           </div>
-          {/* <div>
-            <input
-              type="tel"
-              value={mobile}
-              placeholder="Enter your phone number"
-              onChange={(e) => setMobile(e.target.value)}
-              className="w-full px-3 py-2 border bg-[#CCE9F2] rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
-              required
-            />
-          </div> */}
 
           {error && <p className="text-sm text-red-500">{error}</p>}
 
@@ -198,12 +263,75 @@ export default function LoginPopup({ onClose, onRegister, login }) {
               Cancel
             </button>
           </div>
-        </form>
+        </form> */}
+
+        {step === "login" && (
+          <form onSubmit={handleCheckUserType} className="space-y-4">
+            <input
+              type="text"
+              value={emailOrPhone}
+              placeholder="Enter email or phone"
+              onChange={(e) => setEmailOrPhone(e.target.value)}
+              className="w-full px-3 py-2 bg-[#CCE9F2] rounded"
+              required
+            />
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+<button className="w-full bg-black text-white py-2 rounded">Next</button>
+            {/* <button className="w-full py-2 bg-black text-white rounded">Send OTP</button> */}
+          </form>
+        )}
+
+        {/* STEP 2 — ADMIN PASSWORD FORM */}
+        {step === "admin-password" && (
+          <form onSubmit={handleAdminPasswordLogin} className="space-y-4">
+            <input
+              type="password"
+              className="w-full p-2 bg-[#CCE9F2] rounded"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <button className="w-full bg-black text-white py-2 rounded">Login as Admin</button>
+          </form>
+        )}
+
+        {/* STEP 2B — SEND OTP */}
+        {step === "otp-request" && (
+          <div className="space-y-4">
+            <button
+              onClick={handleSendOtp}
+              className="w-full bg-black text-white py-2 rounded"
+            >
+              Send OTP
+            </button>
+          </div>
+        )}
+
+        {/* OTP INPUT */}
+        {step === "otp" && (
+          <form onSubmit={handleVerifyOtp} className="space-y-4">
+            <input
+              type="text"
+              value={otp}
+              placeholder="Enter OTP"
+              onChange={(e) => setOtp(e.target.value)}
+              className="w-full px-3 py-2 bg-[#CCE9F2] rounded"
+              required
+            />
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+
+            <button className="w-full py-2 bg-black text-white rounded">Verify OTP</button>
+          </form>
+        )}
 
         {!showUserType ? (
           <p className="text-sm text-center mt-4">
             Don't have an account?{' '}
-            <button onClick={handleRegisterClick} className="text-blue-500 hover:underline">
+            <button onClick={() => setShowUserType(true)} className="text-blue-500 hover:underline">
               Register
             </button>
           </p>

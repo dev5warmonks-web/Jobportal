@@ -34,8 +34,14 @@ const DualRangeSlider = ({ min, max, onChange }) => {
         }
     }, [maxVal, getPercent]);
 
-    useEffect(() => {
-        onChange({ min: minVal, max: maxVal });
+    // useEffect(() => {
+    //     onChange({ min: minVal, max: maxVal });
+    // }, [minVal, maxVal, onChange]);
+
+    const fireChange = useCallback(() => {
+        if (typeof onChange === "function") {
+            onChange({ min: minVal, max: maxVal });
+        }
     }, [minVal, maxVal, onChange]);
 
     return (
@@ -50,6 +56,8 @@ const DualRangeSlider = ({ min, max, onChange }) => {
                     setMinVal(value);
                     minValRef.current = value;
                 }}
+                onMouseUp={fireChange}
+                onTouchEnd={fireChange}
                 className="thumb thumb--left"
                 style={{ zIndex: minVal > max - 100 && "5" }}
             />
@@ -63,6 +71,8 @@ const DualRangeSlider = ({ min, max, onChange }) => {
                     setMaxVal(value);
                     maxValRef.current = value;
                 }}
+                onMouseUp={fireChange}
+                onTouchEnd={fireChange}
                 className="thumb thumb--right"
             />
 
@@ -72,8 +82,8 @@ const DualRangeSlider = ({ min, max, onChange }) => {
             </div>
 
             <div className="values">
-                <div className="slider__left-value">{minVal}</div>
-                <div className="slider__right-value">{maxVal}</div>
+                <div className="slider__left-value">{minVal.toLocaleString()}</div>
+                <div className="slider__right-value">{maxVal.toLocaleString()}</div>
             </div>
 
             <style jsx>{`
